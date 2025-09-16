@@ -5,9 +5,7 @@ import {
   Code,
   Smartphone,
   Server,
-  Database,
   Cloud,
-  Shield,
   Zap,
   Users,
   CheckCircle,
@@ -95,7 +93,6 @@ const ServicesSection = () => {
       opacity: 1,
       transition: {
         duration: 0.8,
-        ease: "easeOut",
       },
     },
   };
@@ -153,7 +150,7 @@ const ServicesSection = () => {
           viewport={{ once: true, margin: "-100px" }}
           className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-20"
         >
-          {services.map((service, index) => {
+          {services.map((service) => {
             const IconComponent = getIcon(service.icon);
             return (
               <motion.div
@@ -221,7 +218,7 @@ const ServicesSection = () => {
             variants={containerVariants}
             className="grid grid-cols-2 md:grid-cols-5 gap-4"
           >
-            {technologies.map((tech, index) => (
+            {technologies.map((tech) => (
               <motion.div
                 key={tech.name}
                 variants={itemVariants}

@@ -10,8 +10,6 @@ import {
   Twitter,
   Github,
   Code,
-  Smartphone,
-  Server,
   CheckCircle,
   Star,
 } from "lucide-react";
@@ -105,10 +103,6 @@ const AboutSection = () => {
     visible: {
       y: 0,
       opacity: 1,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut",
-      },
     },
   };
 
@@ -167,18 +161,18 @@ const AboutSection = () => {
                 Uganda and beyond.
               </p>
               <p>
-                Over the years, we've successfully delivered over 10 projects
-                including web platforms like Labour Experts and Ordnancity, and
-                mobile applications like Glam n' Go, Tuwe, and Easy Gas. Our
-                work spans from e-commerce solutions to community management
-                platforms, helping businesses and communities embrace digital
-                transformation.
+                Over the years, we&apos;ve successfully delivered over 10
+                projects including web platforms like Labour Experts and
+                Ordnancity, and mobile applications like Glam n&apos; Go, Tuwe,
+                and Easy Gas. Our work spans from e-commerce solutions to
+                community management platforms, helping businesses and
+                communities embrace digital transformation.
               </p>
               <p>
-                Today, we continue to push the boundaries of what's possible in
-                web and mobile development, always staying ahead of the latest
-                technologies and trends while maintaining our commitment to
-                quality and client satisfaction.
+                Today, we continue to push the boundaries of what&apos;s
+                possible in web and mobile development, always staying ahead of
+                the latest technologies and trends while maintaining our
+                commitment to quality and client satisfaction.
               </p>
             </div>
           </motion.div>
@@ -187,7 +181,7 @@ const AboutSection = () => {
             variants={itemVariants}
             className="grid grid-cols-2 gap-6"
           >
-            {stats.map((stat, index) => {
+            {stats.map((stat) => {
               const IconComponent = stat.icon;
               return (
                 <motion.div
@@ -303,7 +297,7 @@ const AboutSection = () => {
           </motion.h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {values.map((value, index) => (
+            {values.map((value) => (
               <motion.div
                 key={value.title}
                 variants={itemVariants}

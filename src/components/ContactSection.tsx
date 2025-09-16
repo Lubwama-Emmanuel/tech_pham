@@ -135,10 +135,6 @@ const ContactSection = () => {
     visible: {
       y: 0,
       opacity: 1,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut",
-      },
     },
   };
 
@@ -167,15 +163,15 @@ const ContactSection = () => {
             variants={itemVariants}
             className="text-4xl md:text-5xl font-bold text-white mb-6"
           >
-            Let's <span className="gradient-text">Work Together</span>
+            Let&apos;s <span className="gradient-text">Work Together</span>
           </motion.h2>
 
           <motion.p
             variants={itemVariants}
             className="text-xl text-white/80 max-w-3xl mx-auto"
           >
-            Ready to bring your ideas to life? Get in touch with us and let's
-            discuss how we can help you achieve your goals.
+            Ready to bring your ideas to life? Get in touch with us and
+            let&apos;s discuss how we can help you achieve your goals.
           </motion.p>
         </motion.div>
 
@@ -195,7 +191,7 @@ const ContactSection = () => {
             </motion.h3>
 
             <div className="space-y-6 mb-8">
-              {contactInfo.map((info, index) => (
+              {contactInfo.map((info) => (
                 <motion.div
                   key={info.title}
                   variants={itemVariants}
@@ -274,8 +270,8 @@ const ContactSection = () => {
                     Thank You!
                   </h4>
                   <p className="text-white/80">
-                    We've received your message and will get back to you within
-                    24 hours.
+                    We&apos;ve received your message and will get back to you
+                    within 24 hours.
                   </p>
                 </motion.div>
               ) : (

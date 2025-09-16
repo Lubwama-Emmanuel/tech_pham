@@ -22,7 +22,6 @@ const HeroSection = () => {
       opacity: 1,
       transition: {
         duration: 0.8,
-        ease: "easeOut",
       },
     },
   };
@@ -33,7 +32,6 @@ const HeroSection = () => {
       transition: {
         duration: 4,
         repeat: Infinity,
-        ease: "easeInOut",
       },
     },
   };
@@ -41,7 +39,7 @@ const HeroSection = () => {
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 md:pt-0"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 md:pt-24"
     >
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
@@ -162,7 +160,7 @@ const HeroSection = () => {
                 color: "text-green-600",
                 bgColor: "bg-green-50",
               },
-            ].map((service, index) => (
+            ].map((service) => (
               <motion.div
                 key={service.title}
                 whileHover={{ y: -10, scale: 1.02 }}
@@ -189,7 +187,7 @@ const HeroSection = () => {
               { number: "100%", label: "Client Satisfaction" },
               { number: "24/7", label: "Support Available" },
               { number: "3+", label: "Years Experience" },
-            ].map((stat, index) => (
+            ].map((stat) => (
               <motion.div
                 key={stat.label}
                 whileHover={{ scale: 1.1 }}

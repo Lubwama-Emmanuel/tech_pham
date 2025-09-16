@@ -153,7 +153,6 @@ const PortfolioSection = () => {
       opacity: 1,
       transition: {
         duration: 0.8,
-        ease: "easeOut",
       },
     },
   };
@@ -363,7 +362,7 @@ const PortfolioSection = () => {
               Ready to Start Your Project?
             </h3>
             <p className="text-xl mb-8 opacity-90">
-              Let's discuss how we can bring your ideas to life with our
+              Let&apos;s discuss how we can bring your ideas to life with our
               expertise and passion for development.
             </p>
             <motion.button
