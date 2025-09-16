@@ -161,7 +161,7 @@ const AboutSection = () => {
             </h3>
             <div className="space-y-4 text-white/80 leading-relaxed">
               <p>
-                Founded in 2021, TechGeekss started as a passionate team of
+                Founded in 2021, TechGeeks started as a passionate team of
                 developers with a mission to create exceptional digital
                 experiences that transform businesses and communities across
                 Uganda and beyond.
@@ -336,7 +336,7 @@ const AboutSection = () => {
         >
           <motion.div variants={itemVariants} className="text-center mb-12">
             <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Why Choose <span className="gradient-text">TechGeekss</span>?
+              Why Choose <span className="gradient-text">TechGeeks</span>?
             </h3>
             <p className="text-white/80 text-lg">
               We combine technical expertise with creative vision to deliver

@@ -44,7 +44,7 @@ const Navigation = () => {
               <Smartphone className="h-6 w-6 text-orange-400" />
               <Server className="h-6 w-6 text-emerald-400" />
             </div>
-            <span className="text-xl font-bold gradient-text">TechGeekss</span>
+            <span className="text-xl font-bold gradient-text">TechGeeks</span>
           </motion.div>
 
           {/* Desktop Navigation */}

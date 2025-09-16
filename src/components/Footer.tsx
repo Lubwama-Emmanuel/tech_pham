@@ -93,7 +93,7 @@ const Footer = () => {
                   <Smartphone className="h-6 w-6 text-orange-400" />
                   <Server className="h-6 w-6 text-green-400" />
                 </div>
-                <span className="text-2xl font-bold">TechGeekss</span>
+                <span className="text-2xl font-bold">TechGeeks</span>
               </div>
 
               <p className="text-white/80 mb-6 leading-relaxed">
@@ -191,7 +191,7 @@ const Footer = () => {
               variants={itemVariants}
               className="text-white/60 text-sm"
             >
-              © 2024 TechGeekss. All rights reserved.
+              © 2024 TechGeeks. All rights reserved.
             </motion.div>
 
             {/* Social Links */}
