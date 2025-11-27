@@ -177,3 +177,14 @@ html {
 .pulsing {
   animation: pulse 4s ease-in-out infinite;
 }
+
+/* Select options styling */
+select option {
+  background: #0f0f23;
+  color: #ffffff;
+}
+
+select:focus option:checked {
+  background: #6366f1;
+  color: #ffffff;
+}

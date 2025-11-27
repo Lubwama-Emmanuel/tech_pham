@@ -11,6 +11,7 @@ import {
   Users,
   Mail,
   ChevronUp,
+  Star,
 } from "lucide-react";
 
 const FloatingMenu = () => {
@@ -21,6 +22,7 @@ const FloatingMenu = () => {
     { name: "Services", href: "#services", icon: Code },
     { name: "Portfolio", href: "#portfolio", icon: Briefcase },
     { name: "About", href: "#about", icon: Users },
+    { name: "Testimonials", href: "#testimonials", icon: Star },
     { name: "Contact", href: "#contact", icon: Mail },
   ];
 

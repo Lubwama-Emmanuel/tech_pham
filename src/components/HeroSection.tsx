@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Code, Smartphone, Server, Sparkles } from "lucide-react";
+import AnimatedCounter from "./AnimatedCounter";
 
 const HeroSection = () => {
   const containerVariants = {
@@ -194,7 +195,7 @@ const HeroSection = () => {
                 className="text-center"
               >
                 <div className="text-3xl md:text-4xl font-bold gradient-text mb-2">
-                  {stat.number}
+                  <AnimatedCounter value={stat.number} />
                 </div>
                 <div className="text-white/70 font-medium">{stat.label}</div>
               </motion.div>

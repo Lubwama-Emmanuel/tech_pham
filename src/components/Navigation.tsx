@@ -21,6 +21,7 @@ const Navigation = () => {
     { name: "Services", href: "#services" },
     { name: "Portfolio", href: "#portfolio" },
     { name: "About", href: "#about" },
+    { name: "Testimonials", href: "#testimonials" },
     { name: "Contact", href: "#contact" },
   ];
 
@@ -44,7 +45,7 @@ const Navigation = () => {
               <Smartphone className="h-6 w-6 text-orange-400" />
               <Server className="h-6 w-6 text-emerald-400" />
             </div>
-            <span className="text-xl font-bold gradient-text">TechGeeks</span>
+            <span className="text-xl font-bold gradient-text">Lubech</span>
           </motion.div>
 
           {/* Desktop Navigation */}

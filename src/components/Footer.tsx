@@ -30,6 +30,7 @@ const Footer = () => {
       { name: "About Us", href: "#about" },
       { name: "Our Team", href: "#about" },
       { name: "Portfolio", href: "#portfolio" },
+      { name: "Testimonials", href: "#testimonials" },
       { name: "Contact", href: "#contact" },
     ],
     resources: [
@@ -44,10 +45,10 @@ const Footer = () => {
     {
       name: "LinkedIn",
       icon: Linkedin,
-      href: "https://linkedin.com/company/techpham",
+      href: "https://linkedin.com/company/lubech",
     },
-    { name: "Twitter", icon: Twitter, href: "https://twitter.com/techpham" },
-    { name: "GitHub", icon: Github, href: "https://github.com/techpham" },
+    { name: "Twitter", icon: Twitter, href: "https://twitter.com/lubech" },
+    { name: "GitHub", icon: Github, href: "https://github.com/lubech" },
   ];
 
   const containerVariants = {
@@ -92,7 +93,7 @@ const Footer = () => {
                   <Smartphone className="h-6 w-6 text-orange-400" />
                   <Server className="h-6 w-6 text-green-400" />
                 </div>
-                <span className="text-2xl font-bold">TechGeeks</span>
+                <span className="text-2xl font-bold">Lubech</span>
               </div>
 
               <p className="text-white/80 mb-6 leading-relaxed">
@@ -107,7 +108,7 @@ const Footer = () => {
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
                   <Mail className="h-5 w-5 text-blue-400" />
-                  <span className="text-white/80">hello@techpham.com</span>
+                  <span className="text-white/80">info@lubech.tech</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Phone className="h-5 w-5 text-green-400" />
@@ -190,7 +191,7 @@ const Footer = () => {
               variants={itemVariants}
               className="text-white/60 text-sm"
             >
-              © 2024 TechGeeks. All rights reserved.
+              © 2024 Lubech. All rights reserved.
             </motion.div>
 
             {/* Social Links */}

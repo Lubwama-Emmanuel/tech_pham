@@ -13,26 +13,26 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TechGeeks - Professional Web & Mobile Development",
+  title: "Lubech - Professional Web & Mobile Development",
   description:
     "We build stunning websites, cross-platform mobile applications, and robust backend systems. Transform your ideas into digital reality with our expert development team.",
   keywords:
     "web development, mobile app development, backend development, React, Next.js, React Native, Node.js, TypeScript",
-  authors: [{ name: "TechGeeks Team" }],
-  creator: "TechGeeks",
-  publisher: "TechGeeks",
+  authors: [{ name: "Lubech Team" }],
+  creator: "Lubech",
+  publisher: "Lubech",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://techpham.com",
-    title: "TechGeeks - Professional Web & Mobile Development",
+    url: "https://lubech.tech",
+    title: "Lubech - Professional Web & Mobile Development",
     description:
       "We build stunning websites, cross-platform mobile applications, and robust backend systems.",
-    siteName: "TechGeeks",
+    siteName: "Lubech",
   },
   twitter: {
     card: "summary_large_image",
-    title: "TechGeeks - Professional Web & Mobile Development",
+    title: "Lubech - Professional Web & Mobile Development",
     description:
       "We build stunning websites, cross-platform mobile applications, and robust backend systems.",
   },

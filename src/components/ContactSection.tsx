@@ -12,6 +12,7 @@ import {
   User,
   Building,
   FileText,
+  AlertCircle,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -27,6 +28,31 @@ const ContactSection = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  const validateField = (name: string, value: string): string => {
+    switch (name) {
+      case "name":
+        if (!value.trim()) return "Name is required";
+        if (value.trim().length < 2) return "Name must be at least 2 characters";
+        return "";
+      case "email":
+        if (!value.trim()) return "Email is required";
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) return "Please enter a valid email address";
+        return "";
+      case "project":
+        if (!value.trim()) return "Project type is required";
+        return "";
+      case "message":
+        if (!value.trim()) return "Message is required";
+        if (value.trim().length < 10) return "Message must be at least 10 characters";
+        return "";
+      default:
+        return "";
+    }
+  };
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -38,10 +64,58 @@ const ContactSection = () => {
       ...prev,
       [name]: value,
     }));
+
+    // Validate on change if field has been touched
+    if (touched[name]) {
+      const error = validateField(name, value);
+      setErrors((prev) => ({
+        ...prev,
+        [name]: error,
+      }));
+    }
+  };
+
+  const handleBlur = (
+    e: React.FocusEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setTouched((prev) => ({
+      ...prev,
+      [name]: true,
+    }));
+
+    const error = validateField(name, value);
+    setErrors((prev) => ({
+      ...prev,
+      [name]: error,
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Mark all fields as touched
+    const allTouched: Record<string, boolean> = {};
+    const newErrors: Record<string, string> = {};
+
+    Object.keys(formData).forEach((key) => {
+      allTouched[key] = true;
+      const error = validateField(key, formData[key as keyof typeof formData]);
+      if (error) {
+        newErrors[key] = error;
+      }
+    });
+
+    setTouched(allTouched);
+    setErrors(newErrors);
+
+    // Check if there are any errors
+    if (Object.keys(newErrors).length > 0) {
+      return;
+    }
+
     setIsSubmitting(true);
 
     // Simulate form submission
@@ -61,6 +135,8 @@ const ContactSection = () => {
         message: "",
         budget: "",
       });
+      setErrors({});
+      setTouched({});
     }, 3000);
   };
 
@@ -68,7 +144,7 @@ const ContactSection = () => {
     {
       icon: Mail,
       title: "Email Us",
-      details: "hello@techpham.com",
+      details: "info@lubech.tech",
       description: "Send us an email anytime",
       color: "text-blue-600",
       bgColor: "bg-blue-100",
@@ -280,12 +356,14 @@ const ContactSection = () => {
                     <div>
                       <label
                         htmlFor="name"
-                        className="block text-sm font-medium text-gray-700 mb-2"
+                        className="block text-sm font-medium text-white mb-2"
                       >
                         Full Name *
                       </label>
                       <div className="relative">
-                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                        <User className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 ${
+                          errors.name ? "text-red-400" : "text-white/40"
+                        }`} />
                         <input
                           type="text"
                           id="name"
@@ -293,21 +371,39 @@ const ContactSection = () => {
                           required
                           value={formData.name}
                           onChange={handleInputChange}
-                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                          onBlur={handleBlur}
+                          className={`w-full pl-10 pr-4 py-3 glass rounded-lg border transition-all duration-200 text-white placeholder-white/40 ${
+                            errors.name
+                              ? "border-red-400/50 focus:border-red-400 focus:ring-2 focus:ring-red-400/20"
+                              : "border-white/20 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20"
+                          }`}
                           placeholder="John Doe"
                         />
+                        {errors.name && touched.name && (
+                          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                            <AlertCircle className="h-5 w-5 text-red-400" />
+                          </div>
+                        )}
                       </div>
+                      {errors.name && touched.name && (
+                        <p className="mt-1 text-sm text-red-400 flex items-center space-x-1">
+                          <AlertCircle className="h-4 w-4" />
+                          <span>{errors.name}</span>
+                        </p>
+                      )}
                     </div>
 
                     <div>
                       <label
                         htmlFor="email"
-                        className="block text-sm font-medium text-gray-700 mb-2"
+                        className="block text-sm font-medium text-white mb-2"
                       >
                         Email Address *
                       </label>
                       <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                        <Mail className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 ${
+                          errors.email ? "text-red-400" : "text-white/40"
+                        }`} />
                         <input
                           type="email"
                           id="email"
@@ -315,10 +411,26 @@ const ContactSection = () => {
                           required
                           value={formData.email}
                           onChange={handleInputChange}
-                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                          onBlur={handleBlur}
+                          className={`w-full pl-10 pr-4 py-3 glass rounded-lg border transition-all duration-200 text-white placeholder-white/40 ${
+                            errors.email
+                              ? "border-red-400/50 focus:border-red-400 focus:ring-2 focus:ring-red-400/20"
+                              : "border-white/20 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20"
+                          }`}
                           placeholder="john@example.com"
                         />
+                        {errors.email && touched.email && (
+                          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                            <AlertCircle className="h-5 w-5 text-red-400" />
+                          </div>
+                        )}
                       </div>
+                      {errors.email && touched.email && (
+                        <p className="mt-1 text-sm text-red-400 flex items-center space-x-1">
+                          <AlertCircle className="h-4 w-4" />
+                          <span>{errors.email}</span>
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -326,19 +438,20 @@ const ContactSection = () => {
                     <div>
                       <label
                         htmlFor="company"
-                        className="block text-sm font-medium text-gray-700 mb-2"
+                        className="block text-sm font-medium text-white mb-2"
                       >
                         Company
                       </label>
                       <div className="relative">
-                        <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                        <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-white/40" />
                         <input
                           type="text"
                           id="company"
                           name="company"
                           value={formData.company}
                           onChange={handleInputChange}
-                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                          onBlur={handleBlur}
+                          className="w-full pl-10 pr-4 py-3 glass rounded-lg border border-white/20 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 transition-all duration-200 text-white placeholder-white/40"
                           placeholder="Your Company"
                         />
                       </div>
@@ -347,7 +460,7 @@ const ContactSection = () => {
                     <div>
                       <label
                         htmlFor="budget"
-                        className="block text-sm font-medium text-gray-700 mb-2"
+                        className="block text-sm font-medium text-white mb-2"
                       >
                         Project Budget
                       </label>
@@ -356,7 +469,8 @@ const ContactSection = () => {
                         name="budget"
                         value={formData.budget}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                        onBlur={handleBlur}
+                        className="w-full px-4 py-3 glass rounded-lg border border-white/20 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 transition-all duration-200 text-white bg-transparent"
                       >
                         <option value="">Select budget range</option>
                         {budgetRanges.map((range) => (
@@ -371,36 +485,56 @@ const ContactSection = () => {
                   <div>
                     <label
                       htmlFor="project"
-                      className="block text-sm font-medium text-gray-700 mb-2"
+                      className="block text-sm font-medium text-white mb-2"
                     >
                       Project Type *
                     </label>
-                    <select
-                      id="project"
-                      name="project"
-                      required
-                      value={formData.project}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    >
-                      <option value="">Select project type</option>
-                      {projectTypes.map((type) => (
-                        <option key={type} value={type}>
-                          {type}
-                        </option>
-                      ))}
-                    </select>
+                    <div className="relative">
+                      <select
+                        id="project"
+                        name="project"
+                        required
+                        value={formData.project}
+                        onChange={handleInputChange}
+                        onBlur={handleBlur}
+                        className={`w-full px-4 py-3 glass rounded-lg border transition-all duration-200 text-white bg-transparent ${
+                          errors.project
+                            ? "border-red-400/50 focus:border-red-400 focus:ring-2 focus:ring-red-400/20"
+                            : "border-white/20 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20"
+                        }`}
+                      >
+                        <option value="" className="bg-gray-900">Select project type</option>
+                        {projectTypes.map((type) => (
+                          <option key={type} value={type} className="bg-gray-900">
+                            {type}
+                          </option>
+                        ))}
+                      </select>
+                      {errors.project && touched.project && (
+                        <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                          <AlertCircle className="h-5 w-5 text-red-400" />
+                        </div>
+                      )}
+                    </div>
+                    {errors.project && touched.project && (
+                      <p className="mt-1 text-sm text-red-400 flex items-center space-x-1">
+                        <AlertCircle className="h-4 w-4" />
+                        <span>{errors.project}</span>
+                      </p>
+                    )}
                   </div>
 
                   <div>
                     <label
                       htmlFor="message"
-                      className="block text-sm font-medium text-gray-700 mb-2"
+                      className="block text-sm font-medium text-white mb-2"
                     >
                       Project Details *
                     </label>
                     <div className="relative">
-                      <FileText className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                      <FileText className={`absolute left-3 top-3 h-5 w-5 ${
+                        errors.message ? "text-red-400" : "text-white/40"
+                      }`} />
                       <textarea
                         id="message"
                         name="message"
@@ -408,10 +542,26 @@ const ContactSection = () => {
                         rows={5}
                         value={formData.message}
                         onChange={handleInputChange}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"
+                        onBlur={handleBlur}
+                        className={`w-full pl-10 pr-4 py-3 glass rounded-lg border transition-all duration-200 resize-none text-white placeholder-white/40 ${
+                          errors.message
+                            ? "border-red-400/50 focus:border-red-400 focus:ring-2 focus:ring-red-400/20"
+                            : "border-white/20 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20"
+                        }`}
                         placeholder="Tell us about your project, goals, and any specific requirements..."
                       />
+                      {errors.message && touched.message && (
+                        <div className="absolute right-3 top-3">
+                          <AlertCircle className="h-5 w-5 text-red-400" />
+                        </div>
+                      )}
                     </div>
+                    {errors.message && touched.message && (
+                      <p className="mt-1 text-sm text-red-400 flex items-center space-x-1">
+                        <AlertCircle className="h-4 w-4" />
+                        <span>{errors.message}</span>
+                      </p>
+                    )}
                   </div>
 
                   <motion.button
@@ -419,7 +569,7 @@ const ContactSection = () => {
                     disabled={isSubmitting}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full bg-blue-600 text-white py-4 rounded-lg font-semibold flex items-center justify-center space-x-2 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                    className="w-full glass-strong text-white py-4 rounded-lg font-semibold flex items-center justify-center space-x-2 border border-white/30 hover:border-white/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                   >
                     {isSubmitting ? (
                       <>
