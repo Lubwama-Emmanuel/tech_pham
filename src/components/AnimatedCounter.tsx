@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { useInView } from "framer-motion";
 
 interface AnimatedCounterProps {
   value: string;
@@ -44,7 +44,8 @@ const AnimatedCounter = ({
 
         // Easing function for smooth animation
         const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-        const currentValue = startValue + (numericValue - startValue) * easeOutQuart;
+        const currentValue =
+          startValue + (numericValue - startValue) * easeOutQuart;
 
         setCount(currentValue);
 
