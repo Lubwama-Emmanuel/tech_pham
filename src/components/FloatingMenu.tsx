@@ -31,7 +31,12 @@ const FloatingMenu = () => {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div
+      className="fixed right-6 z-50"
+      style={{
+        bottom: "calc(1.5rem + env(safe-area-inset-bottom))",
+      }}
+    >
       {/* Menu Items */}
       <AnimatePresence>
         {isOpen && (

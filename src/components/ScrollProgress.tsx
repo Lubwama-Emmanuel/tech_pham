@@ -38,3 +38,6 @@ const ScrollProgress = () => {
 };
 
 export default ScrollProgress;
+
+
+

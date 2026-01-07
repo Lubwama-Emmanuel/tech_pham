@@ -40,7 +40,10 @@ const HeroSection = () => {
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 md:pt-24"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden"
+      style={{
+        paddingTop: "calc(4rem + env(safe-area-inset-top))",
+      }}
     >
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">

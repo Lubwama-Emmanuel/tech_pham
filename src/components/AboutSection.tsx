@@ -19,37 +19,26 @@ import AnimatedCounter from "./AnimatedCounter";
 const AboutSection = () => {
   const teamMembers: TeamMember[] = [
     {
-      id: "ceo",
-      name: "Emmanuel Lubwama",
-      role: "CEO & Lead Developer",
-      image: "/api/placeholder/300/300",
-      bio: "Full-stack developer with 5+ years of experience building scalable web and mobile applications. Passionate about creating innovative solutions that drive business growth.",
+      id: "lubega",
+      name: "Lubega Faizal",
+      role: "Co-Founder",
+      image: "/staff/lubega.jpeg",
+      bio: "Co-founder dedicated to building exceptional digital experiences. Focused on driving innovation and delivering solutions that make a meaningful impact on businesses and communities.",
+      social: {
+        linkedin: "https://linkedin.com/in/lubega-faizal",
+        github: "https://github.com/lubega-faizal",
+      },
+    },
+    {
+      id: "emmanuel",
+      name: "Lubwama Emmanuel",
+      role: "Co-Founder & CTO",
+      image: "/staff/emmanuel.jpg",
+      bio: "Full-stack developer with 5+ years of experience building scalable web and mobile applications. Passionate about creating innovative solutions that drive business growth and transform ideas into digital reality.",
       social: {
         linkedin: "https://linkedin.com/in/emmanuel-lubwama",
         twitter: "https://twitter.com/emmanuel_lubwama",
         github: "https://github.com/emmanuel-lubwama",
-      },
-    },
-    {
-      id: "cto",
-      name: "Sarah Johnson",
-      role: "CTO & Backend Specialist",
-      image: "/api/placeholder/300/300",
-      bio: "Backend architect with expertise in microservices, cloud infrastructure, and database design. Focused on building robust and scalable systems.",
-      social: {
-        linkedin: "https://linkedin.com/in/sarah-johnson",
-        github: "https://github.com/sarah-johnson",
-      },
-    },
-    {
-      id: "designer",
-      name: "Michael Chen",
-      role: "UI/UX Designer",
-      image: "/api/placeholder/300/300",
-      bio: "Creative designer with a passion for user-centered design. Specializes in creating intuitive and beautiful user experiences across web and mobile platforms.",
-      social: {
-        linkedin: "https://linkedin.com/in/michael-chen",
-        twitter: "https://twitter.com/michael_chen",
       },
     },
   ];
@@ -216,7 +205,7 @@ const AboutSection = () => {
             Our <span className="gradient-text">Team</span>
           </motion.h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {teamMembers.map((member) => (
               <motion.div
                 key={member.id}
@@ -224,8 +213,43 @@ const AboutSection = () => {
                 whileHover={{ y: -10, scale: 1.02 }}
                 className="glass rounded-2xl p-8 border border-white/20 hover:glass-strong hover:border-white/30 transition-all duration-300 text-center"
               >
-                <div className="w-24 h-24 glass rounded-full mx-auto mb-6 flex items-center justify-center border border-white/20">
-                  <Users className="h-12 w-12 text-white/60" />
+                <div className="relative w-32 h-32 mx-auto mb-6">
+                  <div className="absolute inset-0 glass rounded-full border-2 border-white/20 overflow-hidden">
+                    {member.image &&
+                    member.image !== "/api/placeholder/300/300" ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={member.image}
+                        alt={member.name}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = "none";
+                          const parent = target.parentElement;
+                          if (parent) {
+                            const fallback =
+                              parent.querySelector(".member-fallback");
+                            if (fallback) {
+                              (fallback as HTMLElement).style.display = "flex";
+                            }
+                          }
+                        }}
+                      />
+                    ) : null}
+                    <div
+                      className="member-fallback absolute inset-0 w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-500/20 to-orange-500/20"
+                      style={{
+                        display:
+                          member.image &&
+                          member.image !== "/api/placeholder/300/300"
+                            ? "none"
+                            : "flex",
+                      }}
+                    >
+                      <Users className="h-12 w-12 text-white/60" />
+                    </div>
+                  </div>
                 </div>
 
                 <h4 className="text-xl font-bold text-white mb-2">
