@@ -72,7 +72,7 @@ export const metadata: Metadata = {
       "We build stunning websites, cross-platform mobile apps, and robust backend systems. Based in the UK, serving clients worldwide.",
     images: [
       {
-        url: "/og-image.png",
+        url: "/og.png",
         width: 1200,
         height: 630,
         alt: "Lubech — We bring ideas to life",
@@ -89,7 +89,7 @@ export const metadata: Metadata = {
     title: "Lubech | Web & Mobile App Development Agency",
     description:
       "We build stunning websites, cross-platform mobile apps, and robust backend systems. Based in the UK, serving clients worldwide.",
-    images: ["/og-image.png"],
+    images: ["/og.png"],
   },
 
   // ── Icons / PWA ───────────────────────────────────────────────────────────
