@@ -1,33 +1,34 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Send,
-  MessageCircle,
-  Clock,
-  CheckCircle,
-  User,
-  Building,
-  FileText,
-  AlertCircle,
-} from "lucide-react";
 import { useState } from "react";
+import {
+  FaEnvelope,
+  FaPhone,
+  FaMapMarkerAlt,
+  FaCommentDots,
+  FaClock,
+  FaCheckCircle,
+  FaUser,
+  FaFileAlt,
+  FaExclamationCircle,
+  FaPaperPlane,
+  FaSpinner,
+} from "react-icons/fa";
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    company: "",
+    phone: "",
     project: "",
-    message: "",
     budget: "",
+    message: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
@@ -35,557 +36,503 @@ const ContactSection = () => {
     switch (name) {
       case "name":
         if (!value.trim()) return "Name is required";
-        if (value.trim().length < 2) return "Name must be at least 2 characters";
+        if (value.trim().length < 2)
+          return "Name must be at least 2 characters";
         return "";
       case "email":
         if (!value.trim()) return "Email is required";
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(value)) return "Please enter a valid email address";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+          return "Please enter a valid email";
         return "";
       case "project":
         if (!value.trim()) return "Project type is required";
         return "";
       case "message":
         if (!value.trim()) return "Message is required";
-        if (value.trim().length < 10) return "Message must be at least 10 characters";
+        if (value.trim().length < 10)
+          return "Message must be at least 10 characters";
         return "";
       default:
         return "";
     }
   };
 
-  const handleInputChange = (
+  const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    // Validate on change if field has been touched
+    setFormData((prev) => ({ ...prev, [name]: value }));
     if (touched[name]) {
-      const error = validateField(name, value);
-      setErrors((prev) => ({
-        ...prev,
-        [name]: error,
-      }));
+      setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
     }
   };
 
   const handleBlur = (
     e: React.FocusEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value } = e.target;
-    setTouched((prev) => ({
-      ...prev,
-      [name]: true,
-    }));
-
-    const error = validateField(name, value);
-    setErrors((prev) => ({
-      ...prev,
-      [name]: error,
-    }));
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError("");
 
-    // Mark all fields as touched
     const allTouched: Record<string, boolean> = {};
     const newErrors: Record<string, string> = {};
-
     Object.keys(formData).forEach((key) => {
       allTouched[key] = true;
-      const error = validateField(key, formData[key as keyof typeof formData]);
-      if (error) {
-        newErrors[key] = error;
-      }
+      const err = validateField(key, formData[key as keyof typeof formData]);
+      if (err) newErrors[key] = err;
     });
-
     setTouched(allTouched);
     setErrors(newErrors);
-
-    // Check if there are any errors
-    if (Object.keys(newErrors).length > 0) {
-      return;
-    }
+    if (Object.keys(newErrors).length > 0) return;
 
     setIsSubmitting(true);
-
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({
-        name: "",
-        email: "",
-        company: "",
-        project: "",
-        message: "",
-        budget: "",
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
-      setErrors({});
-      setTouched({});
-    }, 3000);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Something went wrong");
+      setIsSubmitted(true);
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          project: "",
+          budget: "",
+          message: "",
+        });
+        setErrors({});
+        setTouched({});
+      }, 4000);
+    } catch (err: unknown) {
+      setSubmitError(
+        err instanceof Error
+          ? err.message
+          : "Failed to send. Please try again.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [
     {
-      icon: Mail,
+      icon: FaEnvelope,
       title: "Email Us",
       details: "info@lubech.tech",
       description: "Send us an email anytime",
-      color: "text-blue-600",
-      bgColor: "bg-blue-100",
+      accent: "#4676C2",
+      href: "mailto:info@lubech.tech",
     },
     {
-      icon: Phone,
+      icon: FaPhone,
       title: "Call Us",
-      details: "+1 (555) 123-4567",
-      description: "Mon-Fri from 9am to 6pm",
-      color: "text-green-600",
-      bgColor: "bg-green-100",
+      details: "+44 7572 964620",
+      description: "Mon–Fri, 9 am – 6 pm",
+      accent: "#59C368",
+      href: "tel:+447572964620",
     },
     {
-      icon: MapPin,
-      title: "Visit Us",
-      details: "San Francisco, CA",
-      description: "Come say hello at our office",
-      color: "text-orange-600",
-      bgColor: "bg-orange-100",
+      icon: FaMapMarkerAlt,
+      title: "Location",
+      details: "28 Foxwell Square NN35AT Northampton",
+      description: "Available worldwide remotely",
+      accent: "#f59e0b",
+      href: "https://maps.google.com/?q=28 Foxwell Square NN35AT Northampton",
     },
     {
-      icon: MessageCircle,
+      icon: FaCommentDots,
       title: "Live Chat",
-      details: "Available 24/7",
+      details: "WhatsApp us",
       description: "Get instant support",
-      color: "text-purple-600",
-      bgColor: "bg-purple-100",
+      accent: "#a78bfa",
+      href: "https://wa.me/447572964620",
     },
   ];
 
   const budgetRanges = [
-    "Under $10,000",
-    "$10,000 - $25,000",
-    "$25,000 - $50,000",
-    "$50,000 - $100,000",
-    "Over $100,000",
+    "$600 – $2,000",
+    "$2,000 – $5,000",
+    "$5,000 – $15,000",
+    "$15,000 – $30,000",
+    "$30,000+",
     "Not sure yet",
   ];
 
   const projectTypes = [
     "Web Application",
     "Mobile App",
-    "Backend System",
     "E-commerce Platform",
-    "API Development",
+    "Backend / API",
     "UI/UX Design",
     "Full-stack Solution",
     "Other",
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
-      },
-    },
-  };
+  const inputBase =
+    "w-full pl-10 pr-4 py-3 rounded-xl border bg-white/5 transition-all duration-200 text-white placeholder-white/30 outline-none";
+  const inputNormal =
+    "border-white/10 focus:border-[#4676C2] focus:ring-2 focus:ring-[#4676C2]/20";
+  const inputError =
+    "border-red-400/50 focus:border-red-400 focus:ring-2 focus:ring-red-400/20";
 
-  const itemVariants = {
-    hidden: { y: 30, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-    },
-  };
+  const FieldError = ({ field }: { field: string }) =>
+    errors[field] && touched[field] ? (
+      <p className="mt-1.5 text-xs text-red-400 flex items-center gap-1">
+        <FaExclamationCircle className="h-3 w-3 flex-shrink-0" />
+        {errors[field]}
+      </p>
+    ) : null;
 
   return (
-    <section id="contact" className="py-20">
+    <section id="contact" className="py-24 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7 }}
           className="text-center mb-16"
         >
-          <motion.div
-            variants={itemVariants}
-            className="inline-flex items-center space-x-2 glass rounded-full px-4 py-2 mb-6 border border-white/20"
-          >
-            <MessageCircle className="h-4 w-4 text-purple-400" />
+          <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-2 mb-6 border border-white/20">
+            <FaCommentDots className="h-4 w-4 text-[#59C368]" />
             <span className="text-sm font-medium text-white/90">
               Get In Touch
             </span>
-          </motion.div>
+          </div>
 
-          <motion.h2
-            variants={itemVariants}
-            className="text-4xl md:text-5xl font-bold text-white mb-6"
-          >
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-5">
             Let&apos;s <span className="gradient-text">Work Together</span>
-          </motion.h2>
+          </h2>
 
-          <motion.p
-            variants={itemVariants}
-            className="text-xl text-white/80 max-w-3xl mx-auto"
-          >
-            Ready to bring your ideas to life? Get in touch with us and
-            let&apos;s discuss how we can help you achieve your goals.
-          </motion.p>
+          <p className="text-xl text-white/70 max-w-2xl mx-auto">
+            Ready to bring your ideas to life? Tell us about your project and
+            we&apos;ll get back to you within 24 hours.
+          </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Contact Information */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
+          {/* Left — contact info */}
           <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.7 }}
+            className="lg:col-span-2 flex flex-col gap-6"
           >
-            <motion.h3
-              variants={itemVariants}
-              className="text-2xl font-bold text-white mb-8"
-            >
-              Get in Touch
-            </motion.h3>
+            <h3 className="text-2xl font-bold text-white mb-2">Contact Info</h3>
 
-            <div className="space-y-6 mb-8">
+            <div className="space-y-4">
               {contactInfo.map((info) => (
-                <motion.div
+                <motion.a
                   key={info.title}
-                  variants={itemVariants}
-                  whileHover={{ x: 10, scale: 1.02 }}
-                  className="flex items-start space-x-4 p-4 rounded-xl glass hover:glass-strong transition-all duration-200 border border-white/10"
+                  href={info.href}
+                  target={info.href.startsWith("http") ? "_blank" : undefined}
+                  rel={
+                    info.href.startsWith("http")
+                      ? "noopener noreferrer"
+                      : undefined
+                  }
+                  whileHover={{ x: 6 }}
+                  className="flex items-start gap-4 p-4 rounded-2xl border border-white/10 bg-white/[0.03] hover:border-white/20 transition-all duration-200 cursor-pointer group"
                 >
                   <div
-                    className={`w-12 h-12 ${info.bgColor} rounded-xl flex items-center justify-center flex-shrink-0`}
+                    className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform duration-200 group-hover:scale-110"
+                    style={{ background: `${info.accent}22` }}
                   >
-                    <info.icon className={`h-6 w-6 ${info.color}`} />
+                    <info.icon
+                      style={{ color: info.accent }}
+                      className="h-5 w-5"
+                    />
                   </div>
                   <div>
-                    <h4 className="text-lg font-semibold text-white mb-1">
+                    <p className="text-white font-semibold text-sm">
                       {info.title}
-                    </h4>
-                    <p className="text-white font-medium mb-1">
+                    </p>
+                    <p className="text-white/90 text-sm mt-0.5 group-hover:text-white transition-colors">
                       {info.details}
                     </p>
-                    <p className="text-white/70 text-sm">{info.description}</p>
+                    <p className="text-white/50 text-xs mt-0.5">
+                      {info.description}
+                    </p>
                   </div>
-                </motion.div>
+                </motion.a>
               ))}
             </div>
 
-            {/* Business Hours */}
-            <motion.div
-              variants={itemVariants}
-              className="glass rounded-2xl p-6 border border-white/20"
-            >
-              <div className="flex items-center space-x-3 mb-4">
-                <Clock className="h-6 w-6 text-indigo-400" />
-                <h4 className="text-lg font-semibold text-white">
+            {/* Business hours */}
+            <div className="p-5 rounded-2xl border border-white/10 bg-white/[0.03] mt-2">
+              <div className="flex items-center gap-2 mb-4">
+                <FaClock className="h-4 w-4 text-[#4676C2]" />
+                <h4 className="text-white font-semibold text-sm">
                   Business Hours
                 </h4>
               </div>
-              <div className="space-y-2 text-white/80">
-                <div className="flex justify-between">
-                  <span>Monday - Friday</span>
-                  <span>9:00 AM - 6:00 PM</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Saturday</span>
-                  <span>10:00 AM - 4:00 PM</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Sunday</span>
-                  <span>Closed</span>
-                </div>
+              <div className="space-y-2 text-sm">
+                {[
+                  ["Monday – Friday", "9:00 AM – 6:00 PM"],
+                  ["Saturday", "10:00 AM – 4:00 PM"],
+                  ["Sunday", "Closed"],
+                ].map(([day, hours]) => (
+                  <div key={day} className="flex justify-between text-white/70">
+                    <span>{day}</span>
+                    <span className="text-white/90">{hours}</span>
+                  </div>
+                ))}
               </div>
-            </motion.div>
+            </div>
           </motion.div>
 
-          {/* Contact Form */}
+          {/* Right — form */}
           <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.7 }}
+            className="lg:col-span-3"
           >
-            <motion.div
-              variants={itemVariants}
-              className="glass rounded-2xl p-8 border border-white/20"
+            {/* Card with gradient border effect */}
+            <div
+              className="rounded-3xl p-px"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(70,118,194,0.5), rgba(89,195,104,0.3), rgba(255,255,255,0.05))",
+              }}
             >
-              <h3 className="text-2xl font-bold text-white mb-6">
-                Start Your Project
-              </h3>
+              <div
+                className="rounded-3xl p-8 md:p-10"
+                style={{ background: "#0f1628" }}
+              >
+                <h3 className="text-2xl font-bold text-white mb-8">
+                  Start Your Project
+                </h3>
 
-              {isSubmitted ? (
-                <motion.div
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  className="text-center py-12"
-                >
-                  <CheckCircle className="h-16 w-16 text-emerald-400 mx-auto mb-4" />
-                  <h4 className="text-2xl font-bold text-white mb-2">
-                    Thank You!
-                  </h4>
-                  <p className="text-white/80">
-                    We&apos;ve received your message and will get back to you
-                    within 24 hours.
-                  </p>
-                </motion.div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label
-                        htmlFor="name"
-                        className="block text-sm font-medium text-white mb-2"
-                      >
-                        Full Name *
-                      </label>
-                      <div className="relative">
-                        <User className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 ${
-                          errors.name ? "text-red-400" : "text-white/40"
-                        }`} />
-                        <input
-                          type="text"
-                          id="name"
-                          name="name"
-                          required
-                          value={formData.name}
-                          onChange={handleInputChange}
-                          onBlur={handleBlur}
-                          className={`w-full pl-10 pr-4 py-3 glass rounded-lg border transition-all duration-200 text-white placeholder-white/40 ${
-                            errors.name
-                              ? "border-red-400/50 focus:border-red-400 focus:ring-2 focus:ring-red-400/20"
-                              : "border-white/20 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20"
-                          }`}
-                          placeholder="John Doe"
-                        />
-                        {errors.name && touched.name && (
-                          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                            <AlertCircle className="h-5 w-5 text-red-400" />
-                          </div>
-                        )}
-                      </div>
-                      {errors.name && touched.name && (
-                        <p className="mt-1 text-sm text-red-400 flex items-center space-x-1">
-                          <AlertCircle className="h-4 w-4" />
-                          <span>{errors.name}</span>
-                        </p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-sm font-medium text-white mb-2"
-                      >
-                        Email Address *
-                      </label>
-                      <div className="relative">
-                        <Mail className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 ${
-                          errors.email ? "text-red-400" : "text-white/40"
-                        }`} />
-                        <input
-                          type="email"
-                          id="email"
-                          name="email"
-                          required
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          onBlur={handleBlur}
-                          className={`w-full pl-10 pr-4 py-3 glass rounded-lg border transition-all duration-200 text-white placeholder-white/40 ${
-                            errors.email
-                              ? "border-red-400/50 focus:border-red-400 focus:ring-2 focus:ring-red-400/20"
-                              : "border-white/20 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20"
-                          }`}
-                          placeholder="john@example.com"
-                        />
-                        {errors.email && touched.email && (
-                          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                            <AlertCircle className="h-5 w-5 text-red-400" />
-                          </div>
-                        )}
-                      </div>
-                      {errors.email && touched.email && (
-                        <p className="mt-1 text-sm text-red-400 flex items-center space-x-1">
-                          <AlertCircle className="h-4 w-4" />
-                          <span>{errors.email}</span>
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label
-                        htmlFor="company"
-                        className="block text-sm font-medium text-white mb-2"
-                      >
-                        Company
-                      </label>
-                      <div className="relative">
-                        <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-white/40" />
-                        <input
-                          type="text"
-                          id="company"
-                          name="company"
-                          value={formData.company}
-                          onChange={handleInputChange}
-                          onBlur={handleBlur}
-                          className="w-full pl-10 pr-4 py-3 glass rounded-lg border border-white/20 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 transition-all duration-200 text-white placeholder-white/40"
-                          placeholder="Your Company"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="budget"
-                        className="block text-sm font-medium text-white mb-2"
-                      >
-                        Project Budget
-                      </label>
-                      <select
-                        id="budget"
-                        name="budget"
-                        value={formData.budget}
-                        onChange={handleInputChange}
-                        onBlur={handleBlur}
-                        className="w-full px-4 py-3 glass rounded-lg border border-white/20 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 transition-all duration-200 text-white bg-transparent"
-                      >
-                        <option value="">Select budget range</option>
-                        {budgetRanges.map((range) => (
-                          <option key={range} value={range}>
-                            {range}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="project"
-                      className="block text-sm font-medium text-white mb-2"
-                    >
-                      Project Type *
-                    </label>
-                    <div className="relative">
-                      <select
-                        id="project"
-                        name="project"
-                        required
-                        value={formData.project}
-                        onChange={handleInputChange}
-                        onBlur={handleBlur}
-                        className={`w-full px-4 py-3 glass rounded-lg border transition-all duration-200 text-white bg-transparent ${
-                          errors.project
-                            ? "border-red-400/50 focus:border-red-400 focus:ring-2 focus:ring-red-400/20"
-                            : "border-white/20 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20"
-                        }`}
-                      >
-                        <option value="" className="bg-gray-900">Select project type</option>
-                        {projectTypes.map((type) => (
-                          <option key={type} value={type} className="bg-gray-900">
-                            {type}
-                          </option>
-                        ))}
-                      </select>
-                      {errors.project && touched.project && (
-                        <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                          <AlertCircle className="h-5 w-5 text-red-400" />
-                        </div>
-                      )}
-                    </div>
-                    {errors.project && touched.project && (
-                      <p className="mt-1 text-sm text-red-400 flex items-center space-x-1">
-                        <AlertCircle className="h-4 w-4" />
-                        <span>{errors.project}</span>
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="message"
-                      className="block text-sm font-medium text-white mb-2"
-                    >
-                      Project Details *
-                    </label>
-                    <div className="relative">
-                      <FileText className={`absolute left-3 top-3 h-5 w-5 ${
-                        errors.message ? "text-red-400" : "text-white/40"
-                      }`} />
-                      <textarea
-                        id="message"
-                        name="message"
-                        required
-                        rows={5}
-                        value={formData.message}
-                        onChange={handleInputChange}
-                        onBlur={handleBlur}
-                        className={`w-full pl-10 pr-4 py-3 glass rounded-lg border transition-all duration-200 resize-none text-white placeholder-white/40 ${
-                          errors.message
-                            ? "border-red-400/50 focus:border-red-400 focus:ring-2 focus:ring-red-400/20"
-                            : "border-white/20 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20"
-                        }`}
-                        placeholder="Tell us about your project, goals, and any specific requirements..."
-                      />
-                      {errors.message && touched.message && (
-                        <div className="absolute right-3 top-3">
-                          <AlertCircle className="h-5 w-5 text-red-400" />
-                        </div>
-                      )}
-                    </div>
-                    {errors.message && touched.message && (
-                      <p className="mt-1 text-sm text-red-400 flex items-center space-x-1">
-                        <AlertCircle className="h-4 w-4" />
-                        <span>{errors.message}</span>
-                      </p>
-                    )}
-                  </div>
-
-                  <motion.button
-                    type="submit"
-                    disabled={isSubmitting}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full glass-strong text-white py-4 rounded-lg font-semibold flex items-center justify-center space-x-2 border border-white/30 hover:border-white/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                {isSubmitted ? (
+                  <motion.div
+                    initial={{ scale: 0.85, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="text-center py-14"
                   >
-                    {isSubmitting ? (
-                      <>
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        <span>Sending...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Send className="h-5 w-5" />
-                        <span>Send Message</span>
-                      </>
+                    <FaCheckCircle className="h-16 w-16 text-[#59C368] mx-auto mb-5" />
+                    <h4 className="text-2xl font-bold text-white mb-2">
+                      Message Sent!
+                    </h4>
+                    <p className="text-white/70">
+                      We&apos;ve received your enquiry and will reply within 24
+                      hours.
+                    </p>
+                  </motion.div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-5">
+                    {/* Name + Email */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div>
+                        <label
+                          htmlFor="name"
+                          className="block text-sm font-medium text-white/80 mb-2"
+                        >
+                          Full Name <span className="text-[#59C368]">*</span>
+                        </label>
+                        <div className="relative">
+                          <FaUser
+                            className={`absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 ${errors.name && touched.name ? "text-red-400" : "text-white/30"}`}
+                          />
+                          <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            required
+                            value={formData.name}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            className={`${inputBase} ${errors.name && touched.name ? inputError : inputNormal}`}
+                            placeholder="John Doe"
+                          />
+                        </div>
+                        <FieldError field="name" />
+                      </div>
+
+                      <div>
+                        <label
+                          htmlFor="email"
+                          className="block text-sm font-medium text-white/80 mb-2"
+                        >
+                          Email Address{" "}
+                          <span className="text-[#59C368]">*</span>
+                        </label>
+                        <div className="relative">
+                          <FaEnvelope
+                            className={`absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 ${errors.email && touched.email ? "text-red-400" : "text-white/30"}`}
+                          />
+                          <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            required
+                            value={formData.email}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            className={`${inputBase} ${errors.email && touched.email ? inputError : inputNormal}`}
+                            placeholder="john@example.com"
+                          />
+                        </div>
+                        <FieldError field="email" />
+                      </div>
+                    </div>
+
+                    {/* Phone + Project type row */}
+                    {/* Phone number */}
+                    <div>
+                      <label
+                        htmlFor="phone"
+                        className="block text-sm font-medium text-white/80 mb-2"
+                      >
+                        Phone Number
+                      </label>
+                      <div className="relative">
+                        <FaPhone className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-white/30" />
+                        <input
+                          type="tel"
+                          id="phone"
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleChange}
+                          className={`${inputBase} ${inputNormal}`}
+                          placeholder="+256 700 000 000"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Project type + Budget */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div>
+                        <label
+                          htmlFor="project"
+                          className="block text-sm font-medium text-white/80 mb-2"
+                        >
+                          Project Type <span className="text-[#59C368]">*</span>
+                        </label>
+                        <select
+                          id="project"
+                          name="project"
+                          required
+                          value={formData.project}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className={`w-full px-4 py-3 rounded-xl border bg-white/5 transition-all duration-200 text-white outline-none ${errors.project && touched.project ? inputError : inputNormal}`}
+                        >
+                          <option value="" className="bg-[#0f1628]">
+                            Select type
+                          </option>
+                          {projectTypes.map((t) => (
+                            <option key={t} value={t} className="bg-[#0f1628]">
+                              {t}
+                            </option>
+                          ))}
+                        </select>
+                        <FieldError field="project" />
+                      </div>
+
+                      <div>
+                        <label
+                          htmlFor="budget"
+                          className="block text-sm font-medium text-white/80 mb-2"
+                        >
+                          Budget Range
+                        </label>
+                        <select
+                          id="budget"
+                          name="budget"
+                          value={formData.budget}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 rounded-xl border border-white/10 bg-white/5 focus:border-[#4676C2] focus:ring-2 focus:ring-[#4676C2]/20 transition-all duration-200 text-white outline-none"
+                        >
+                          <option value="" className="bg-[#0f1628]">
+                            Select budget
+                          </option>
+                          {budgetRanges.map((r) => (
+                            <option key={r} value={r} className="bg-[#0f1628]">
+                              {r}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* Message */}
+                    <div>
+                      <label
+                        htmlFor="message"
+                        className="block text-sm font-medium text-white/80 mb-2"
+                      >
+                        Project Details{" "}
+                        <span className="text-[#59C368]">*</span>
+                      </label>
+                      <div className="relative">
+                        <FaFileAlt
+                          className={`absolute left-3.5 top-3.5 h-4 w-4 ${errors.message && touched.message ? "text-red-400" : "text-white/30"}`}
+                        />
+                        <textarea
+                          id="message"
+                          name="message"
+                          required
+                          rows={5}
+                          value={formData.message}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className={`${inputBase} resize-none pt-3 ${errors.message && touched.message ? inputError : inputNormal}`}
+                          placeholder="Tell us about your project, goals, and any specific requirements..."
+                        />
+                      </div>
+                      <FieldError field="message" />
+                    </div>
+
+                    {/* Server error */}
+                    {submitError && (
+                      <p className="text-sm text-red-400 flex items-center gap-2">
+                        <FaExclamationCircle className="h-4 w-4 flex-shrink-0" />
+                        {submitError}
+                      </p>
                     )}
-                  </motion.button>
-                </form>
-              )}
-            </motion.div>
+
+                    {/* Submit */}
+                    <motion.button
+                      type="submit"
+                      disabled={isSubmitting}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.97 }}
+                      className="w-full btn-gradient-animated text-white py-4 rounded-full font-semibold text-base flex items-center justify-center gap-3 shadow-lg shadow-[#4676C2]/25 disabled:opacity-60 disabled:cursor-not-allowed transition-opacity duration-200"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <FaSpinner className="h-5 w-5 animate-spin" />
+                          Sending…
+                        </>
+                      ) : (
+                        <>
+                          <FaPaperPlane className="h-5 w-5" />
+                          Send Message
+                        </>
+                      )}
+                    </motion.button>
+                  </form>
+                )}
+              </div>
+            </div>
           </motion.div>
         </div>
       </div>

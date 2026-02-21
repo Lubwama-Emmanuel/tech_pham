@@ -1,6 +1,32 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
+import {
+  SiReact,
+  SiNextdotjs,
+  SiTypescript,
+  SiNodedotjs,
+  SiMongodb,
+  SiPostgresql,
+  SiDocker,
+  SiGraphql,
+  SiFirebase,
+  SiSupabase,
+  SiGo,
+  SiPhp,
+  SiFlutter,
+  SiRedis,
+  SiTailwindcss,
+  SiPython,
+  SiExpo,
+  SiPrisma,
+  SiStripe,
+  SiVercel,
+  SiAmazonwebservices,
+  SiDart,
+  SiJavascript,
+} from "react-icons/si";
 import {
   Code,
   Smartphone,
@@ -9,7 +35,6 @@ import {
   Zap,
   Users,
   CheckCircle,
-  ArrowRight,
 } from "lucide-react";
 import { Service } from "@/types";
 
@@ -62,17 +87,34 @@ const ServicesSection = () => {
     },
   ];
 
-  const technologies = [
-    { name: "React", category: "Frontend" },
-    { name: "Next.js", category: "Frontend" },
-    { name: "TypeScript", category: "Language" },
-    { name: "Node.js", category: "Backend" },
-    { name: "React Native", category: "Mobile" },
-    { name: "MongoDB", category: "Database" },
-    { name: "PostgreSQL", category: "Database" },
-    { name: "AWS", category: "Cloud" },
-    { name: "Docker", category: "DevOps" },
-    { name: "GraphQL", category: "API" },
+  const techRow1 = [
+    { name: "React", icon: SiReact, color: "#61DAFB" },
+    { name: "Next.js", icon: SiNextdotjs, color: "#ffffff" },
+    { name: "TypeScript", icon: SiTypescript, color: "#3178C6" },
+    { name: "Node.js", icon: SiNodedotjs, color: "#339933" },
+    { name: "React Native", icon: SiReact, color: "#61DAFB" },
+    { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
+    { name: "PostgreSQL", icon: SiPostgresql, color: "#4169E1" },
+    { name: "Firebase", icon: SiFirebase, color: "#FFCA28" },
+    { name: "Supabase", icon: SiSupabase, color: "#3ECF8E" },
+    { name: "GraphQL", icon: SiGraphql, color: "#E10098" },
+    { name: "Docker", icon: SiDocker, color: "#2496ED" },
+    { name: "AWS", icon: SiAmazonwebservices, color: "#FF9900" },
+  ];
+
+  const techRow2 = [
+    { name: "Flutter", icon: SiFlutter, color: "#02569B" },
+    { name: "Dart", icon: SiDart, color: "#0175C2" },
+    { name: "Go", icon: SiGo, color: "#00ADD8" },
+    { name: "PHP", icon: SiPhp, color: "#777BB4" },
+    { name: "Python", icon: SiPython, color: "#3776AB" },
+    { name: "Redis", icon: SiRedis, color: "#DC382D" },
+    { name: "Tailwind CSS", icon: SiTailwindcss, color: "#06B6D4" },
+    { name: "Prisma", icon: SiPrisma, color: "#2D3748" },
+    { name: "Stripe", icon: SiStripe, color: "#635BFF" },
+    { name: "Expo", icon: SiExpo, color: "#ffffff" },
+    { name: "Vercel", icon: SiVercel, color: "#ffffff" },
+    { name: "JavaScript", icon: SiJavascript, color: "#F7DF1E" },
   ];
 
   const containerVariants = {
@@ -107,7 +149,13 @@ const ServicesSection = () => {
   };
 
   return (
-    <section id="services" className="py-20">
+    <section id="services" className="py-20 relative overflow-hidden">
+      {/* Watermark */}
+      <div className="pointer-events-none select-none absolute top-0 left-0 opacity-[0.07] -translate-x-1/4 -translate-y-1/4">
+        <div className="relative w-96 h-96 overflow-hidden">
+          <Image src="/logo_icon.png" alt="" fill className="object-contain scale-[3] origin-center" aria-hidden />
+        </div>
+      </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           variants={containerVariants}
@@ -171,7 +219,7 @@ const ServicesSection = () => {
                   {service.description}
                 </p>
 
-                <ul className="space-y-3 mb-8">
+                <ul className="space-y-3">
                   {service.features.map((feature, featureIndex) => (
                     <li
                       key={featureIndex}
@@ -182,57 +230,87 @@ const ServicesSection = () => {
                     </li>
                   ))}
                 </ul>
-
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="w-full glass-strong text-white py-3 rounded-lg font-semibold flex items-center justify-center space-x-2 border border-white/30 hover:border-white/50 transition-all duration-200"
-                >
-                  <span>Learn More</span>
-                  <ArrowRight className="h-4 w-4" />
-                </motion.button>
               </motion.div>
             );
           })}
         </motion.div>
 
-        {/* Technologies Section */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="glass-strong rounded-3xl p-8 md:p-12 border border-white/20"
-        >
-          <motion.div variants={itemVariants} className="text-center mb-12">
-            <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Technologies We <span className="gradient-text">Master</span>
-            </h3>
-            <p className="text-white/80 text-lg">
-              We stay at the forefront of technology to deliver cutting-edge
-              solutions
-            </p>
-          </motion.div>
+      </div>
 
-          <motion.div
-            variants={containerVariants}
-            className="grid grid-cols-2 md:grid-cols-5 gap-4"
-          >
-            {technologies.map((tech) => (
-              <motion.div
-                key={tech.name}
-                variants={itemVariants}
-                whileHover={{ scale: 1.05, y: -5 }}
-                className="glass rounded-xl p-4 text-center border border-white/10 hover:glass-strong hover:border-white/20 transition-all duration-200"
-              >
-                <div className="text-lg font-semibold text-white mb-1">
-                  {tech.name}
-                </div>
-                <div className="text-sm text-white/60">{tech.category}</div>
-              </motion.div>
-            ))}
-          </motion.div>
+      {/* ── Section Divider ── */}
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent my-4" />
+
+      {/* Technologies We Master — full-width marquee */}
+      <div
+        style={{
+          background: "linear-gradient(180deg, rgba(70,118,194,0.08) 0%, rgba(89,195,104,0.06) 100%)",
+          borderTop: "1px solid rgba(255,255,255,0.08)",
+          borderBottom: "1px solid rgba(255,255,255,0.08)",
+        }}
+        className="py-24"
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16 px-4"
+        >
+          <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Technologies We <span className="gradient-text">Master</span>
+          </h3>
+          <p className="text-white/70 text-lg max-w-2xl mx-auto">
+            We stay at the forefront of technology to deliver cutting-edge solutions
+          </p>
         </motion.div>
+
+        {/* Row 1 — scrolls left */}
+        <div className="overflow-hidden mb-6">
+          <div
+            className="flex gap-6 w-max"
+            style={{ animation: "marquee 40s linear infinite", willChange: "transform" }}
+          >
+            {[...techRow1, ...techRow1].map((tech, i) => {
+              const Icon = tech.icon;
+              return (
+                <div
+                  key={i}
+                  className="flex items-center gap-4 glass px-8 py-5 rounded-2xl border border-white/10 hover:border-white/30 hover:glass-strong transition-all duration-200 whitespace-nowrap flex-shrink-0 cursor-default"
+                >
+                  <Icon style={{ color: tech.color, fontSize: "2rem" }} className="flex-shrink-0" />
+                  <span className="text-white font-semibold text-lg">{tech.name}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Row 2 — scrolls right */}
+        <div className="overflow-hidden">
+          <div
+            className="flex gap-6 w-max"
+            style={{ animation: "marquee-reverse 40s linear infinite", willChange: "transform" }}
+          >
+            {[...techRow2, ...techRow2].map((tech, i) => {
+              const Icon = tech.icon;
+              return (
+                <div
+                  key={i}
+                  className="flex items-center gap-4 glass px-8 py-5 rounded-2xl border border-white/10 hover:border-white/30 hover:glass-strong transition-all duration-200 whitespace-nowrap flex-shrink-0 cursor-default"
+                >
+                  <Icon style={{ color: tech.color, fontSize: "2rem" }} className="flex-shrink-0" />
+                  <span className="text-white font-semibold text-lg">{tech.name}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Section Divider ── */}
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Process Section */}
         <motion.div

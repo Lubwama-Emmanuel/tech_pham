@@ -21,7 +21,7 @@ const AnimatedCounter = ({
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const hasAnimated = useRef(false);
 
-  // Extract numeric value from string (handles "10+", "100%", etc.)
+  // Extract numeric value from string (handles "30+", "100%", etc.)
   const getNumericValue = (val: string): number => {
     const numStr = val.replace(/[^0-9.]/g, "");
     return parseFloat(numStr) || 0;

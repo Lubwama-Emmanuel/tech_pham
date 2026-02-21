@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import {
   Users,
   Target,
@@ -26,7 +27,6 @@ const AboutSection = () => {
       bio: "Co-founder dedicated to building exceptional digital experiences. Focused on driving innovation and delivering solutions that make a meaningful impact on businesses and communities.",
       social: {
         linkedin: "https://linkedin.com/in/lubega-faizal",
-        github: "https://github.com/lubega-faizal",
       },
     },
     {
@@ -36,9 +36,8 @@ const AboutSection = () => {
       image: "/staff/emmanuel.jpg",
       bio: "Full-stack developer with 5+ years of experience building scalable web and mobile applications. Passionate about creating innovative solutions that drive business growth and transform ideas into digital reality.",
       social: {
-        linkedin: "https://linkedin.com/in/emmanuel-lubwama",
-        twitter: "https://twitter.com/emmanuel_lubwama",
-        github: "https://github.com/emmanuel-lubwama",
+        linkedin: "https://www.linkedin.com/in/lubwama-emmanuel-b35377226/",
+        github: "https://github.com/Lubwama-Emmanuel",
       },
     },
   ];
@@ -71,9 +70,9 @@ const AboutSection = () => {
   ];
 
   const stats = [
-    { number: "10+", label: "Projects Delivered", icon: Code },
+    { number: "30+", label: "Projects Delivered", icon: Code },
     { number: "100%", label: "Client Satisfaction", icon: Star },
-    { number: "3+", label: "Years Experience", icon: Award },
+    { number: "7+", label: "Years Experience", icon: Award },
     { number: "24/7", label: "Support Available", icon: Heart },
   ];
 
@@ -97,7 +96,19 @@ const AboutSection = () => {
   };
 
   return (
-    <section id="about" className="py-20">
+    <section id="about" className="py-20 relative overflow-hidden">
+      {/* Watermark */}
+      <div className="pointer-events-none select-none absolute top-1/2 right-0 opacity-[0.07] translate-x-1/3 -translate-y-1/2">
+        <div className="relative w-80 h-80 overflow-hidden">
+          <Image
+            src="/logo_icon.png"
+            alt=""
+            fill
+            className="object-contain scale-[3] origin-center"
+            aria-hidden
+          />
+        </div>
+      </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
@@ -151,7 +162,7 @@ const AboutSection = () => {
                 Uganda and beyond.
               </p>
               <p>
-                Over the years, we&apos;ve successfully delivered over 10
+                Over the years, we&apos;ve successfully delivered over 30
                 projects including web platforms like Labour Experts and
                 Ordnancity, and mobile applications like Glam n&apos; Go, Tuwe,
                 and Easy Gas. Our work spans from e-commerce solutions to

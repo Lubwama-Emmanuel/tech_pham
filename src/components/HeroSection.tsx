@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { ArrowRight, Code, Smartphone, Server, Sparkles } from "lucide-react";
 import AnimatedCounter from "./AnimatedCounter";
 
@@ -45,6 +46,19 @@ const HeroSection = () => {
         paddingTop: "calc(4rem + env(safe-area-inset-top))",
       }}
     >
+      {/* Watermark */}
+      <div className="pointer-events-none select-none absolute bottom-10 right-0 opacity-[0.07] translate-x-1/4">
+        <div className="relative w-80 h-80 overflow-hidden">
+          <Image
+            src="/logo_icon.png"
+            alt=""
+            fill
+            className="object-contain scale-[3] origin-center"
+            aria-hidden
+          />
+        </div>
+      </div>
+
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
@@ -95,7 +109,7 @@ const HeroSection = () => {
             variants={itemVariants}
             className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
           >
-            <span className="gradient-text">Transform Your Ideas</span>
+            <span className="gradient-text-animated">Transform Your Ideas</span>
             <br />
             <span className="text-white">Into Digital Reality</span>
           </motion.h1>
@@ -114,24 +128,26 @@ const HeroSection = () => {
             variants={itemVariants}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
           >
-            <motion.button
+            <motion.a
+              href="#contact"
               whileHover={{
                 scale: 1.05,
-                boxShadow: "0 20px 40px rgba(59, 130, 246, 0.3)",
+                boxShadow: "0 20px 40px rgba(70, 118, 194, 0.4)",
               }}
               whileTap={{ scale: 0.95 }}
               className="group glass-strong text-white px-8 py-4 rounded-full text-lg font-semibold flex items-center space-x-2 border border-white/30 hover:border-white/50 transition-all duration-300"
             >
               <span>Start Your Project</span>
               <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
-            </motion.button>
-            <motion.button
+            </motion.a>
+            <motion.a
+              href="#portfolio"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="glass text-white/90 px-8 py-4 rounded-full text-lg font-semibold border border-white/20 hover:glass-strong hover:border-white/40 transition-all duration-300"
             >
               View Our Work
-            </motion.button>
+            </motion.a>
           </motion.div>
 
           {/* Services Preview */}
@@ -187,10 +203,10 @@ const HeroSection = () => {
             className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto"
           >
             {[
-              { number: "10+", label: "Projects Delivered" },
+              { number: "30+", label: "Projects Delivered" },
               { number: "100%", label: "Client Satisfaction" },
               { number: "24/7", label: "Support Available" },
-              { number: "3+", label: "Years Experience" },
+              { number: "7+", label: "Years Experience" },
             ].map((stat) => (
               <motion.div
                 key={stat.label}

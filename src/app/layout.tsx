@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -12,41 +12,267 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const BASE_URL = "https://lubech.tech";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+  themeColor: "#0f0f23",
+};
+
 export const metadata: Metadata = {
-  title: "Lubech - Professional Web & Mobile Development",
+  metadataBase: new URL(BASE_URL),
+
+  // ── Core ──────────────────────────────────────────────────────────────────
+  title: {
+    default: "Lubech | Web & Mobile App Development Agency — Uganda",
+    template: "%s | Lubech",
+  },
   description:
-    "We build stunning websites, cross-platform mobile applications, and robust backend systems. Transform your ideas into digital reality with our expert development team.",
-  keywords:
-    "web development, mobile app development, backend development, React, Next.js, React Native, Node.js, TypeScript",
-  authors: [{ name: "Lubech Team" }],
+    "Lubech is a Kampala-based software development agency building high-performance websites, cross-platform mobile apps, and robust backend systems. We bring ideas to life.",
+  keywords: [
+    "web development Uganda",
+    "mobile app development Uganda",
+    "software agency Kampala",
+    "Next.js development",
+    "React Native apps",
+    "Node.js backend",
+    "TypeScript developers",
+    "Flutter development",
+    "e-commerce development",
+    "full-stack development",
+    "Lubech",
+    "tech company Uganda",
+    "app development Africa",
+  ],
+  authors: [
+    { name: "Lubwama Emmanuel", url: BASE_URL },
+    { name: "Lubega Faizal", url: BASE_URL },
+  ],
   creator: "Lubech",
   publisher: "Lubech",
+  category: "Technology",
+
+  // ── Canonical ─────────────────────────────────────────────────────────────
+  alternates: {
+    canonical: BASE_URL,
+  },
+
+  // ── Open Graph ────────────────────────────────────────────────────────────
   openGraph: {
     type: "website",
-    locale: "en_US",
-    url: "https://lubech.tech",
-    title: "Lubech - Professional Web & Mobile Development",
-    description:
-      "We build stunning websites, cross-platform mobile applications, and robust backend systems.",
+    locale: "en_UG",
+    alternateLocale: ["en_US", "en_GB"],
+    url: BASE_URL,
     siteName: "Lubech",
+    title: "Lubech | Web & Mobile App Development Agency — Uganda",
+    description:
+      "We build stunning websites, cross-platform mobile apps, and robust backend systems. Based in Kampala, serving clients worldwide.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Lubech — We bring ideas to life",
+        type: "image/png",
+      },
+    ],
   },
+
+  // ── Twitter / X ───────────────────────────────────────────────────────────
   twitter: {
     card: "summary_large_image",
-    title: "Lubech - Professional Web & Mobile Development",
+    site: "@lubech",
+    creator: "@lubech",
+    title: "Lubech | Web & Mobile App Development Agency",
     description:
-      "We build stunning websites, cross-platform mobile applications, and robust backend systems.",
+      "We build stunning websites, cross-platform mobile apps, and robust backend systems. Based in Kampala, serving clients worldwide.",
+    images: ["/og-image.png"],
   },
+
+  // ── Icons / PWA ───────────────────────────────────────────────────────────
+  icons: {
+    icon: [
+      { url: "/logo_icon.png", type: "image/png" },
+    ],
+    shortcut: "/logo_icon.png",
+    apple: "/logo_icon.png",
+    other: [
+      { rel: "mask-icon", url: "/logo_icon.png", color: "#4676C2" },
+    ],
+  },
+  manifest: "/site.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Lubech",
+  },
+
+  // ── Crawling ──────────────────────────────────────────────────────────────
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
+      noimageindex: false,
       "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
     },
   },
+
+  // ── Verification (add your codes when ready) ──────────────────────────────
+  verification: {
+    google: "REPLACE_WITH_GOOGLE_SEARCH_CONSOLE_CODE",
+    // yandex: "REPLACE_WITH_YANDEX_CODE",
+    // bing: "REPLACE_WITH_BING_CODE",
+  },
+};
+
+// ── JSON-LD Structured Data ────────────────────────────────────────────────
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${BASE_URL}/#organization`,
+      name: "Lubech",
+      alternateName: "Lubech Tech",
+      url: BASE_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: `${BASE_URL}/logo_icon.png`,
+        width: 512,
+        height: 512,
+      },
+      description:
+        "Lubech is a Kampala-based software development agency building high-performance websites, cross-platform mobile apps, and robust backend systems.",
+      foundingDate: "2022",
+      founders: [
+        { "@type": "Person", name: "Lubwama Emmanuel" },
+        { "@type": "Person", name: "Lubega Faizal" },
+      ],
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Kampala",
+        addressCountry: "UG",
+      },
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+          telephone: "+256752615503",
+          contactType: "customer service",
+          email: "info@lubech.tech",
+          availableLanguage: ["English"],
+        },
+      ],
+      sameAs: [
+        "https://twitter.com/lubech",
+        "https://linkedin.com/company/lubech",
+        "https://github.com/lubech",
+        "https://wa.me/256752615503",
+      ],
+      areaServed: {
+        "@type": "Place",
+        name: "Worldwide",
+      },
+      knowsAbout: [
+        "Web Development",
+        "Mobile App Development",
+        "React Native",
+        "Next.js",
+        "Node.js",
+        "TypeScript",
+        "Flutter",
+        "Firebase",
+        "UI/UX Design",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${BASE_URL}/#website`,
+      url: BASE_URL,
+      name: "Lubech",
+      description: "Web & Mobile App Development Agency based in Kampala, Uganda",
+      publisher: { "@id": `${BASE_URL}/#organization` },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: `${BASE_URL}/?q={search_term_string}`,
+        },
+        "query-input": "required name=search_term_string",
+      },
+      inLanguage: "en-UG",
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${BASE_URL}/#webpage`,
+      url: BASE_URL,
+      name: "Lubech | Web & Mobile App Development Agency — Uganda",
+      isPartOf: { "@id": `${BASE_URL}/#website` },
+      about: { "@id": `${BASE_URL}/#organization` },
+      description:
+        "We build stunning websites, cross-platform mobile apps, and robust backend systems. Based in Kampala, serving clients worldwide.",
+      breadcrumb: {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: BASE_URL,
+          },
+        ],
+      },
+      inLanguage: "en-UG",
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": `${BASE_URL}/#service`,
+      name: "Lubech Software Development",
+      image: `${BASE_URL}/og-image.png`,
+      url: BASE_URL,
+      telephone: "+256752615503",
+      email: "info@lubech.tech",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Kampala",
+        addressCountry: "UG",
+      },
+      priceRange: "$$$",
+      openingHoursSpecification: [
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          opens: "09:00",
+          closes: "18:00",
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Saturday"],
+          opens: "10:00",
+          closes: "16:00",
+        },
+      ],
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "Development Services",
+        itemListElement: [
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Web Application Development" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Mobile App Development" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Backend & API Development" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "UI/UX Design" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "E-commerce Development" } },
+        ],
+      },
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -55,16 +281,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en-UG">
       <head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
-        />
-        <meta name="theme-color" content="#0f0f23" />
-        <meta
-          name="apple-mobile-web-app-status-bar-style"
-          content="black-translucent"
+        <link rel="icon" href="/logo_icon.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/logo_icon.png" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
       <body

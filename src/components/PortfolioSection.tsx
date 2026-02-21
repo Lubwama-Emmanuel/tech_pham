@@ -1,63 +1,300 @@
 "use client";
 
-import { motion } from "framer-motion";
-import {
-  ExternalLink,
-  Github,
-  Code,
-  Smartphone,
-  Server,
-  Filter,
-} from "lucide-react";
-import { Project } from "@/types";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
+import NextImage from "next/image";
 import { useState } from "react";
+import {
+  FaCode,
+  FaMobileAlt,
+  FaFilter,
+  FaGooglePlay,
+  FaApple,
+  FaGlobe,
+  FaExternalLinkAlt,
+  FaChevronDown,
+  FaChevronUp,
+} from "react-icons/fa";
+import { Project } from "@/types";
 
+const isExternalUrl = (url: string) =>
+  url.startsWith("http://") || url.startsWith("https://");
+
+const ProjectCard = ({
+  project,
+  variants,
+  featured = false,
+}: {
+  project: Project;
+  variants: Variants;
+  featured?: boolean;
+}) => {
+  const [imgError, setImgError] = useState(false);
+
+  const hasImage =
+    project.image && project.image !== "/api/placeholder/600/400" && !imgError;
+
+  const categoryMeta: Record<
+    string,
+    { label: string; color: string; icon: React.ReactNode }
+  > = {
+    web: {
+      label: "Web App",
+      color: "text-[#4676C2] border-[#4676C2]/40 bg-[#4676C2]/10",
+      icon: <FaGlobe className="h-3.5 w-3.5" />,
+    },
+    mobile: {
+      label: "Mobile App",
+      color: "text-[#59C368] border-[#59C368]/40 bg-[#59C368]/10",
+      icon: <FaMobileAlt className="h-3.5 w-3.5" />,
+    },
+  };
+
+  const meta = categoryMeta[project.category] ?? categoryMeta.web;
+
+  const gradients: Record<string, string> = {
+    web: "from-[#4676C2]/30 to-[#59C368]/20",
+    mobile: "from-[#59C368]/30 to-[#4676C2]/20",
+  };
+
+  const placeholderIcons: Record<string, React.ReactNode> = {
+    web: (
+      <FaCode
+        className="text-white/20"
+        style={{ fontSize: featured ? "5rem" : "3.5rem" }}
+      />
+    ),
+    mobile: (
+      <FaMobileAlt
+        className="text-white/20"
+        style={{ fontSize: featured ? "5rem" : "3.5rem" }}
+      />
+    ),
+  };
+
+  const imgHeight = featured ? "h-72 md:h-96" : "h-52";
+
+  return (
+    <motion.div
+      variants={variants}
+      whileHover={{ y: -6 }}
+      className="group glass rounded-3xl border border-white/10 hover:border-white/25 hover:glass-strong transition-all duration-300 overflow-hidden flex flex-col"
+    >
+      {/* Thumbnail */}
+      <div className={`relative ${imgHeight} overflow-hidden flex-shrink-0`}>
+        {hasImage && !isExternalUrl(project.image!) ? (
+          <>
+            <NextImage
+              src={project.image!}
+              alt={project.title}
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              sizes="(max-width:768px) 100vw, 50vw"
+              onError={() => setImgError(true)}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+          </>
+        ) : hasImage && isExternalUrl(project.image!) ? (
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={project.image!}
+              alt={project.title}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              onError={() => setImgError(true)}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+          </>
+        ) : (
+          <div
+            className={`absolute inset-0 bg-gradient-to-br ${gradients[project.category] ?? gradients.web} flex items-center justify-center`}
+          >
+            {placeholderIcons[project.category] ?? placeholderIcons.web}
+          </div>
+        )}
+
+        {/* Category badge */}
+        <div className="absolute top-4 left-4 z-10">
+          <span
+            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border backdrop-blur-sm ${meta.color}`}
+          >
+            {meta.icon}
+            {meta.label}
+          </span>
+        </div>
+
+        {/* Hover overlay */}
+        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
+          <div className="flex gap-3">
+            {project.liveUrl && (
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="glass-strong p-3 rounded-full border border-white/30 hover:border-white/60 transition-all"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <FaExternalLinkAlt className="h-5 w-5 text-white" />
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="p-6 flex flex-col flex-1">
+        <h3
+          className={`font-bold text-white mb-2 ${featured ? "text-2xl" : "text-xl"}`}
+        >
+          {project.title}
+        </h3>
+        <p className="text-white/70 leading-relaxed mb-5 flex-1 text-sm">
+          {project.description}
+        </p>
+
+        {/* Tech stack */}
+        <div className="flex flex-wrap gap-2 mb-5">
+          {project.technologies.map((tech) => (
+            <span
+              key={tech}
+              className="px-2.5 py-1 rounded-lg text-xs font-medium text-white/70 border border-white/10 bg-white/5"
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+
+        {/* CTA buttons */}
+        <div className="flex gap-3 mt-auto">
+          {project.liveUrl && (
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-semibold text-sm text-white border border-[#4676C2]/50 bg-[#4676C2]/15 hover:bg-[#4676C2]/30 hover:border-[#4676C2] transition-all duration-200"
+            >
+              {project.category === "mobile" ? (
+                <>
+                  <FaGooglePlay className="h-4 w-4" />
+                  <span>Play Store</span>
+                </>
+              ) : (
+                <>
+                  <FaGlobe className="h-4 w-4" />
+                  <span>View Live</span>
+                </>
+              )}
+            </a>
+          )}
+          {project.githubUrl && (
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-semibold text-sm text-white border border-[#59C368]/50 bg-[#59C368]/10 hover:bg-[#59C368]/25 hover:border-[#59C368] transition-all duration-200"
+            >
+              <FaApple className="h-4 w-4" />
+              <span>App Store</span>
+            </a>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+// ─────────────────────────────────────────────
 const PortfolioSection = () => {
   const [activeFilter, setActiveFilter] = useState("all");
+  const [showAll, setShowAll] = useState(false);
 
   const projects: Project[] = [
+    // ── Web projects ──
     {
-      id: "labour-experts",
-      title: "Labour Experts Platform",
+      id: "space4climate",
+      title: "Space4Climate",
       description:
-        "A comprehensive platform connecting skilled workers with employers, featuring job matching, skill verification, and secure payment processing.",
-      image: "/api/placeholder/600/400",
-      technologies: [
-        "Next.js",
-        "TypeScript",
-        "Tailwind CSS",
-        "Node.js",
-        "MongoDB",
-      ],
+        "Fun, online educational experience for schoolkids globally about space and climate change, combining film-making and social media.",
+      image: "/projects/space4climate.png",
+      technologies: ["Next.js", "React", "Tailwind CSS", "Vercel"],
       category: "web",
-      liveUrl: "https://labour-experts.vercel.app",
+      liveUrl: "https://space4climate.vercel.app",
     },
+
+    {
+      id: "masifa",
+      title: "Masifa Group",
+      description:
+        "OFSTED-registered children's homes website for a specialist SEMH/EBD care provider, including referrals, activities, and careers sections.",
+      image: "/projects/masifa.png",
+      technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
+      category: "web",
+      liveUrl: "https://masifa.vercel.app",
+    },
+    {
+      id: "queensgate",
+      title: "Queensgate International School",
+      description:
+        "Full-featured school website for an Ontario-certified online international school, including admissions, academics, and a multi-step application flow.",
+      image: "/projects/queensgate.png",
+      technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
+      category: "web",
+      liveUrl: "https://queensgate.vercel.app",
+    },
+    {
+      id: "nextgenfighthub",
+      title: "Next Gen Fight Hub",
+      description:
+        "Gym website for a Muay Thai, Boxing & MMA training facility in Basildon, Essex — featuring schedules, membership tiers, and a community hub.",
+      image: "/projects/nextgenfighthub.png",
+      technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
+      category: "web",
+      liveUrl: "https://nextgenfighthub.vercel.app",
+    },
+
     {
       id: "mashongatea",
       title: "Mashongatea Website",
       description:
         "Professional business website showcasing services and portfolio with modern design, responsive layout, and optimized performance.",
-      image: "/api/placeholder/600/400",
+      image: "/projects/mashongatea.png",
       technologies: ["React", "Next.js", "Tailwind CSS", "Framer Motion"],
       category: "web",
       liveUrl: "https://www.mashongatea.com",
     },
     {
-      id: "ordnancity",
-      title: "Ordnancity Platform",
+      id: "actualisationproject",
+      title: "The Actualisation Project",
       description:
-        "Advanced city management platform with real-time monitoring, citizen services, and administrative tools for urban development.",
-      image: "/api/placeholder/600/400",
-      technologies: ["Next.js", "TypeScript", "PostgreSQL", "Redis", "Docker"],
+        "Coaching and mentorship platform focused on truth, connection, and real change — featuring assessments, programmes, and 1:1 coaching.",
+      image: "/projects/actualisationproject.jpg",
+      technologies: ["Next.js", "React", "Tailwind CSS", "Vercel"],
       category: "web",
-      liveUrl: "https://ordnancity.vercel.app",
+      liveUrl: "https://theactualisationproject.vercel.app",
+    },
+
+    // ── Mobile projects ──
+    {
+      id: "cafe-jafn",
+      title: "Cafe Jaf'n — Food Ordering",
+      description:
+        "Modern cafe ordering app with menu management, online payments, and delivery tracking for a seamless dining experience.",
+      image: "/projects/cafe-jafn.jpg",
+      technologies: [
+        "React Native",
+        "Firebase",
+        "Stripe",
+        "Node.js",
+        "MongoDB",
+      ],
+      category: "mobile",
+      githubUrl: "https://apps.apple.com/ug/app/cafe-jafn/id6746074084",
     },
     {
       id: "glam-n-go",
-      title: "Glam n' Go - E-commerce App",
+      title: "Glam n' Go — E-commerce App",
       description:
-        "Cross-platform shopping app for women, men, and kids products with secure payments, real-time delivery tracking, and user-friendly interface.",
-      image: "/api/placeholder/600/400",
+        "Cross-platform shopping app for women, men, and kids with secure payments, real-time delivery tracking, and a seamless user experience.",
+      image: "/projects/glam-n-go.jpg",
       technologies: [
         "React Native",
         "Firebase",
@@ -72,10 +309,10 @@ const PortfolioSection = () => {
     },
     {
       id: "tuwe-app",
-      title: "Tuwe - Community Management",
+      title: "Tuwe — Community Management",
       description:
-        "Revolutionary community management platform for Ugandan neighborhoods, featuring fee collections, property listings, and local services integration.",
-      image: "/api/placeholder/600/400",
+        "Revolutionary community management platform for Ugandan neighborhoods with fee collections, property listings, and local services.",
+      image: "/projects/tuwe.jpg",
       technologies: [
         "React Native",
         "Node.js",
@@ -86,13 +323,14 @@ const PortfolioSection = () => {
       category: "mobile",
       liveUrl:
         "https://play.google.com/store/apps/details?id=com.emmanuellubwama.tuwe",
+      githubUrl: "https://apps.apple.com/ug/app/tuwe/id6752911597",
     },
     {
       id: "easy-gas",
-      title: "Easy Gas - Delivery App",
+      title: "Easy Gas — Delivery App",
       description:
         "Convenient cooking gas delivery app with seamless ordering, real-time tracking, and reliable service across Uganda.",
-      image: "/api/placeholder/600/400",
+      image: "/projects/easy-gas.jpg",
       technologies: [
         "React Native",
         "Firebase",
@@ -105,277 +343,191 @@ const PortfolioSection = () => {
         "https://play.google.com/store/apps/details?id=com.easygas.mobile.app",
       githubUrl: "https://apps.apple.com/ug/app/easy-gas/id6738344020",
     },
-    {
-      id: "cafe-jafn",
-      title: "Cafe Jaf'n - Food Ordering",
-      description:
-        "Modern cafe ordering app with menu management, online payments, and delivery tracking for seamless dining experience.",
-      image: "/api/placeholder/600/400",
-      technologies: [
-        "React Native",
-        "Firebase",
-        "Stripe",
-        "Node.js",
-        "MongoDB",
-      ],
-      category: "mobile",
-      liveUrl: "https://apps.apple.com/ug/app/cafe-jafn/id6746074084",
-    },
   ];
 
   const filters = [
-    { id: "all", label: "All Projects", icon: Filter },
-    { id: "web", label: "Web Apps", icon: Code },
-    { id: "mobile", label: "Mobile Apps", icon: Smartphone },
-    { id: "backend", label: "Backend", icon: Server },
+    {
+      id: "all",
+      label: "All Projects",
+      icon: <FaFilter className="h-3.5 w-3.5" />,
+    },
+    { id: "web", label: "Web Apps", icon: <FaCode className="h-3.5 w-3.5" /> },
+    {
+      id: "mobile",
+      label: "Mobile Apps",
+      icon: <FaMobileAlt className="h-3.5 w-3.5" />,
+    },
   ];
 
-  const filteredProjects =
+  const filtered =
     activeFilter === "all"
       ? projects
-      : projects.filter((project) => project.category === activeFilter);
+      : projects.filter((p) => p.category === activeFilter);
+
+  const INITIAL_COUNT = 3;
+  const visible = showAll ? filtered : filtered.slice(0, INITIAL_COUNT);
+  const hasMore = filtered.length > INITIAL_COUNT;
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.3,
-      },
+      transition: { staggerChildren: 0.1, delayChildren: 0.15 },
     },
   };
 
   const itemVariants = {
     hidden: { y: 30, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.8,
-      },
-    },
-  };
-
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case "web":
-        return Code;
-      case "mobile":
-        return Smartphone;
-      case "backend":
-        return Server;
-      default:
-        return Code;
-    }
-  };
-
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case "web":
-        return "glass text-indigo-300 border border-indigo-400/30";
-      case "mobile":
-        return "glass text-orange-300 border border-orange-400/30";
-      case "backend":
-        return "glass text-emerald-300 border border-emerald-400/30";
-      default:
-        return "glass text-white/70 border border-white/20";
-    }
+    visible: { y: 0, opacity: 1, transition: { duration: 0.6 } },
   };
 
   return (
-    <section id="portfolio" className="py-20">
+    <section id="portfolio" className="py-24 relative overflow-hidden">
+      {/* Watermark */}
+      <div className="pointer-events-none select-none absolute bottom-0 right-0 opacity-[0.07] translate-x-1/4 translate-y-1/4">
+        <div className="relative w-96 h-96 overflow-hidden">
+          <NextImage
+            src="/logo_icon.png"
+            alt=""
+            fill
+            className="object-contain scale-[3] origin-center"
+            aria-hidden
+          />
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          className="text-center mb-16"
+          transition={{ duration: 0.7 }}
+          className="text-center mb-14"
         >
-          <motion.div
-            variants={itemVariants}
-            className="inline-flex items-center space-x-2 glass rounded-full px-4 py-2 mb-6 border border-white/20"
-          >
-            <Code className="h-4 w-4 text-orange-400" />
+          <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-2 mb-6 border border-white/20">
+            <FaCode className="h-4 w-4 text-[#59C368]" />
             <span className="text-sm font-medium text-white/90">
               Our Portfolio
             </span>
-          </motion.div>
+          </div>
 
-          <motion.h2
-            variants={itemVariants}
-            className="text-4xl md:text-5xl font-bold text-white mb-6"
-          >
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-5">
             Featured <span className="gradient-text">Projects</span>
-          </motion.h2>
+          </h2>
 
-          <motion.p
-            variants={itemVariants}
-            className="text-xl text-white/80 max-w-3xl mx-auto"
-          >
-            Explore our portfolio of successful projects that showcase our
-            expertise in web development, mobile applications, and backend
-            systems.
-          </motion.p>
+          <p className="text-xl text-white/70 max-w-2xl mx-auto">
+            Real products, real impact — from web platforms to mobile apps
+            shipped to thousands of users.
+          </p>
         </motion.div>
 
-        {/* Filter Buttons */}
+        {/* Filter tabs */}
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="flex flex-wrap justify-center gap-4 mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-wrap justify-center gap-3 mb-14"
         >
-          {filters.map((filter) => {
-            const IconComponent = filter.icon;
-            return (
-              <motion.button
-                key={filter.id}
-                variants={itemVariants}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setActiveFilter(filter.id)}
-                className={`flex items-center space-x-2 px-6 py-3 rounded-full font-medium transition-all duration-200 ${
-                  activeFilter === filter.id
-                    ? "glass-strong text-white border border-white/30"
-                    : "glass text-white/80 border border-white/10 hover:glass-strong hover:border-white/20"
-                }`}
-              >
-                <IconComponent className="h-4 w-4" />
-                <span>{filter.label}</span>
-              </motion.button>
-            );
-          })}
-        </motion.div>
-
-        {/* Projects Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          {filteredProjects.map((project) => {
-            const CategoryIcon = getCategoryIcon(project.category);
-            return (
-              <motion.div
-                key={project.id}
-                variants={itemVariants}
-                whileHover={{ y: -10, scale: 1.02 }}
-                className="glass rounded-2xl border border-white/20 hover:glass-strong hover:border-white/30 transition-all duration-300 overflow-hidden"
-              >
-                {/* Project Image */}
-                <div className="relative h-48 bg-gradient-to-br from-indigo-500/20 to-orange-500/20 overflow-hidden">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <CategoryIcon className="h-16 w-16 text-white/40" />
-                  </div>
-                  <div className="absolute top-4 right-4">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${getCategoryColor(
-                        project.category
-                      )}`}
-                    >
-                      {project.category}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Project Content */}
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-white mb-3">
-                    {project.title}
-                  </h3>
-
-                  <p className="text-white/80 mb-4 leading-relaxed">
-                    {project.description}
-                  </p>
-
-                  {/* Technologies */}
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {project.technologies.map((tech, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1 glass text-white/80 rounded-full text-sm font-medium border border-white/10"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex space-x-3">
-                    {project.liveUrl && (
-                      <motion.a
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 glass-strong text-white py-2 px-4 rounded-lg font-medium flex items-center justify-center space-x-2 border border-white/30 hover:border-white/50 transition-all duration-200"
-                      >
-                        <ExternalLink className="h-4 w-4" />
-                        <span>
-                          {project.category === "mobile"
-                            ? "Download"
-                            : "View Site"}
-                        </span>
-                      </motion.a>
-                    )}
-                    {project.githubUrl && (
-                      <motion.a
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 glass text-white/90 py-2 px-4 rounded-lg font-medium flex items-center justify-center space-x-2 border border-white/20 hover:glass-strong hover:border-white/40 transition-all duration-200"
-                      >
-                        <Github className="h-4 w-4" />
-                        <span>
-                          {project.category === "mobile" ? "iOS App" : "Code"}
-                        </span>
-                      </motion.a>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </motion.div>
-
-        {/* Call to Action */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="text-center mt-16"
-        >
-          <motion.div
-            variants={itemVariants}
-            className="glass-strong rounded-3xl p-8 md:p-12 text-white border border-white/30"
-          >
-            <h3 className="text-3xl md:text-4xl font-bold mb-4">
-              Ready to Start Your Project?
-            </h3>
-            <p className="text-xl mb-8 opacity-90">
-              Let&apos;s discuss how we can bring your ideas to life with our
-              expertise and passion for development.
-            </p>
-            <motion.button
-              whileHover={{
-                scale: 1.05,
-                boxShadow: "0 20px 40px rgba(0, 0, 0, 0.2)",
+          {filters.map((f) => (
+            <button
+              key={f.id}
+              onClick={() => {
+                setActiveFilter(f.id);
+                setShowAll(false);
               }}
-              whileTap={{ scale: 0.95 }}
-              className="glass text-white px-8 py-4 rounded-full text-lg font-semibold border border-white/30 hover:glass-strong hover:border-white/50 transition-all duration-200"
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-medium text-sm transition-all duration-200 ${
+                activeFilter === f.id
+                  ? "bg-[#4676C2] text-white border border-[#4676C2] shadow-lg shadow-[#4676C2]/25"
+                  : "glass text-white/70 border border-white/10 hover:border-white/25 hover:text-white"
+              }`}
             >
-              Get Started Today
-            </motion.button>
+              {f.icon}
+              {f.label}
+            </button>
+          ))}
+        </motion.div>
+
+        {/* Projects */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeFilter}
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            exit={{ opacity: 0, y: 10 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {visible.map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                variants={itemVariants}
+              />
+            ))}
           </motion.div>
+        </AnimatePresence>
+
+        {/* View More / View Less */}
+        {hasMore && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex justify-center mt-10"
+          >
+            <button
+              onClick={() => setShowAll((prev) => !prev)}
+              className="flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-sm text-white border border-white/20 glass hover:glass-strong hover:border-white/40 transition-all duration-200"
+            >
+              {showAll ? (
+                <>
+                  <FaChevronUp className="h-4 w-4" />
+                  Show Less
+                </>
+              ) : (
+                <>
+                  <FaChevronDown className="h-4 w-4" />
+                  View All Projects
+                </>
+              )}
+            </button>
+          </motion.div>
+        )}
+
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="mt-20 text-center"
+        >
+          <div
+            className="rounded-3xl p-10 md:p-14 border border-white/10 relative overflow-hidden"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(70,118,194,0.15) 0%, rgba(89,195,104,0.10) 100%)",
+            }}
+          >
+            <div className="relative z-10">
+              <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                Ready to Build Something{" "}
+                <span className="gradient-text">Amazing?</span>
+              </h3>
+              <p className="text-white/70 text-lg mb-8 max-w-xl mx-auto">
+                Let&apos;s turn your idea into a product people love. We&apos;re
+                ready when you are.
+              </p>
+              <a
+                href="#contact"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-full text-white font-semibold text-lg border border-[#4676C2] bg-[#4676C2]/20 hover:bg-[#4676C2]/40 transition-all duration-200 shadow-lg shadow-[#4676C2]/20"
+              >
+                Start Your Project
+                <FaExternalLinkAlt className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>

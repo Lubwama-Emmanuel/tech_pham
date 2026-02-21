@@ -3,11 +3,11 @@
 :root {
   --background: #0a0a0a;
   --foreground: #ffffff;
-  --primary: #6366f1;
+  --primary: #4676C2;
   --primary-foreground: #ffffff;
   --secondary: rgba(255, 255, 255, 0.1);
   --secondary-foreground: #ffffff;
-  --accent: #f59e0b;
+  --accent: #59C368;
   --accent-foreground: #ffffff;
   --muted: rgba(255, 255, 255, 0.05);
   --muted-foreground: rgba(255, 255, 255, 0.7);
@@ -68,21 +68,21 @@ body::before {
   width: 100%;
   height: 100%;
   min-height: 100vh;
-  min-height: 100dvh; /* Dynamic viewport height for mobile */
+  min-height: 100dvh;
   min-height: -webkit-fill-available;
   background: radial-gradient(
       circle at 20% 80%,
-      rgba(120, 119, 198, 0.3) 0%,
+      rgba(70, 118, 194, 0.25) 0%,
       transparent 50%
     ),
     radial-gradient(
       circle at 80% 20%,
-      rgba(255, 119, 198, 0.3) 0%,
+      rgba(89, 195, 104, 0.2) 0%,
       transparent 50%
     ),
     radial-gradient(
       circle at 40% 40%,
-      rgba(120, 219, 255, 0.2) 0%,
+      rgba(70, 118, 194, 0.15) 0%,
       transparent 50%
     );
   pointer-events: none;
@@ -149,7 +149,7 @@ html {
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #6366f1 0%, #f59e0b 50%, #ec4899 100%);
+  background: linear-gradient(135deg, #4676C2 0%, #59C368 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -157,9 +157,32 @@ html {
 
 .gradient-border {
   position: relative;
-  background: linear-gradient(135deg, #6366f1, #f59e0b, #ec4899);
+  background: linear-gradient(135deg, #4676C2, #59C368);
   padding: 1px;
   border-radius: var(--radius);
+}
+
+/* Animated gradient for hero heading */
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.gradient-text-animated {
+  background: linear-gradient(
+    135deg,
+    #4676C2 0%,
+    #59C368 25%,
+    #7ab8f5 50%,
+    #59C368 75%,
+    #4676C2 100%
+  );
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 4s ease infinite;
 }
 
 .gradient-border::before {
@@ -200,6 +223,30 @@ html {
   animation: pulse 4s ease-in-out infinite;
 }
 
+/* Tech marquee */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-reverse {
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+/* Animated gradient button */
+@keyframes btn-gradient-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.btn-gradient-animated {
+  background: linear-gradient(135deg, #4676C2 0%, #59C368 40%, #7ab8f5 70%, #4676C2 100%);
+  background-size: 250% 250%;
+  animation: btn-gradient-shift 3s ease infinite;
+}
+
 /* Select options styling */
 select option {
   background: #0f0f23;
@@ -207,6 +254,6 @@ select option {
 }
 
 select:focus option:checked {
-  background: #6366f1;
+  background: #4676C2;
   color: #ffffff;
 }

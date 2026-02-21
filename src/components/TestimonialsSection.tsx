@@ -1,8 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Quote, Star, ChevronLeft, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import Image from "next/image";
+import { FaStar, FaQuoteLeft } from "react-icons/fa";
 
 interface Testimonial {
   id: string;
@@ -11,208 +11,166 @@ interface Testimonial {
   company: string;
   content: string;
   rating: number;
-  image?: string;
 }
 
+const testimonials: Testimonial[] = [
+  {
+    id: "1",
+    name: "Sarah Johnson",
+    role: "CEO",
+    company: "Labour Experts",
+    content:
+      "Lubech transformed our vision into a powerful platform. Their expertise in web development and attention to detail exceeded our expectations. The team delivered on time and within budget.",
+    rating: 5,
+  },
+  {
+    id: "2",
+    name: "Barbara Kenyana",
+    role: "Founder",
+    company: "Glam n' Go",
+    content:
+      "Working with Lubech was a game-changer. They built our e-commerce app with such professionalism and care. Our app has over 5K downloads and growing. Highly recommend!",
+    rating: 5,
+  },
+  {
+    id: "3",
+    name: "James Ochen",
+    role: "Director",
+    company: "Tuwe Technologies",
+    content:
+      "The team at Lubech understood our community management needs perfectly. They created a robust platform that serves thousands of users. Their backend expertise is outstanding.",
+    rating: 5,
+  },
+  {
+    id: "4",
+    name: "Emily Rodriguez",
+    role: "Director",
+    company: "Ordnancity",
+    content:
+      "Lubech's technical skills and creative approach helped us build a cutting-edge city management platform. Their support throughout the project was exceptional.",
+    rating: 5,
+  },
+  {
+    id: "5",
+    name: "Isaac Sekatawa",
+    role: "Co-Founder",
+    company: "Easy Gas",
+    content:
+      "From concept to launch, the Lubech team was with us every step of the way. Our delivery app is now live on both stores and users love it. Truly world-class work.",
+    rating: 5,
+  },
+  {
+    id: "6",
+    name: "Amara Jaffer",
+    role: "Owner",
+    company: "Cafe Jaf'n",
+    content:
+      "We needed a food ordering app fast, and Lubech delivered beyond what we imagined. Clean UI, smooth payments, and zero issues after launch. Amazing team.",
+    rating: 5,
+  },
+];
+
+const TestimonialCard = ({ t }: { t: Testimonial }) => (
+  <div className="flex-shrink-0 w-80 md:w-96 p-6 rounded-2xl border border-white/10 bg-white/[0.03]">
+    <FaQuoteLeft
+      className="h-6 w-6 mb-4 opacity-30"
+      style={{ color: "#4676C2" }}
+    />
+    <p className="text-white/80 leading-relaxed mb-6 text-sm">
+      &ldquo;{t.content}&rdquo;
+    </p>
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="font-semibold text-white text-sm">{t.name}</p>
+        <p className="text-white/50 text-xs mt-0.5">
+          {t.role} · {t.company}
+        </p>
+      </div>
+      <div className="flex gap-0.5">
+        {[...Array(t.rating)].map((_, i) => (
+          <FaStar key={i} className="h-3.5 w-3.5 text-yellow-400" />
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
 const TestimonialsSection = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const testimonials: Testimonial[] = [
-    {
-      id: "1",
-      name: "Sarah Johnson",
-      role: "CEO",
-      company: "Labour Experts",
-      content:
-        "Lubech transformed our vision into a powerful platform. Their expertise in web development and attention to detail exceeded our expectations. The team delivered on time and within budget.",
-      rating: 5,
-    },
-    {
-      id: "2",
-      name: "Michael Chen",
-      role: "Founder",
-      company: "Glam n' Go",
-      content:
-        "Working with Lubech was a game-changer. They built our e-commerce app with such professionalism and care. Our app has over 5K downloads and growing. Highly recommend!",
-      rating: 5,
-    },
-    {
-      id: "3",
-      name: "James Ochen",
-      role: "Product Manager",
-      company: "Tuwe Technologies",
-      content:
-        "The team at Lubech understood our community management needs perfectly. They created a robust platform that serves thousands of users. Their backend expertise is outstanding.",
-      rating: 5,
-    },
-    {
-      id: "4",
-      name: "Emily Rodriguez",
-      role: "Director",
-      company: "Ordnancity",
-      content:
-        "Lubech's technical skills and creative approach helped us build a cutting-edge city management platform. Their support throughout the project was exceptional.",
-      rating: 5,
-    },
-  ];
-
-  const nextTestimonial = () => {
-    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-  };
-
-  const prevTestimonial = () => {
-    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-  };
-
-  const goToTestimonial = (index: number) => {
-    setCurrentIndex(index);
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 30, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-    },
-  };
+  const row1 = testimonials.slice(0, 3);
+  const row2 = testimonials.slice(3);
 
   return (
-    <section id="testimonials" className="py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="text-center mb-16"
-        >
-          <motion.div
-            variants={itemVariants}
-            className="inline-flex items-center space-x-2 glass rounded-full px-4 py-2 mb-6 border border-white/20"
-          >
-            <Star className="h-4 w-4 text-yellow-400" />
-            <span className="text-sm font-medium text-white/90">Client Reviews</span>
-          </motion.div>
+    <section id="testimonials" className="py-24 relative overflow-hidden">
+      {/* Watermark */}
+      <div className="pointer-events-none select-none absolute top-1/2 left-1/2 opacity-[0.05] -translate-x-1/2 -translate-y-1/2">
+        <div className="relative w-96 h-96 overflow-hidden">
+          <Image
+            src="/logo_icon.png"
+            alt=""
+            fill
+            className="object-contain scale-[3] origin-center"
+            aria-hidden
+          />
+        </div>
+      </div>
 
-          <motion.h2
-            variants={itemVariants}
-            className="text-4xl md:text-5xl font-bold text-white mb-6"
-          >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-14">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7 }}
+          className="text-center"
+        >
+          <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-2 mb-6 border border-white/20">
+            <FaStar className="h-4 w-4 text-yellow-400" />
+            <span className="text-sm font-medium text-white/90">
+              Client Reviews
+            </span>
+          </div>
+
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-5">
             What Our <span className="gradient-text">Clients Say</span>
-          </motion.h2>
+          </h2>
 
-          <motion.p
-            variants={itemVariants}
-            className="text-xl text-white/80 max-w-3xl mx-auto"
-          >
-            Don&apos;t just take our word for it. Here&apos;s what our clients have to say
-            about working with Lubech.
-          </motion.p>
+          <p className="text-xl text-white/70 max-w-2xl mx-auto">
+            Don&apos;t just take our word for it — here&apos;s what our clients
+            say about working with us.
+          </p>
         </motion.div>
+      </div>
 
-        {/* Testimonials Carousel */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="relative"
+      {/* Row 1 — scrolls left */}
+      <div className="overflow-hidden mb-5">
+        <div
+          className="flex gap-5 w-max"
+          style={{
+            animation: "marquee 35s linear infinite",
+            willChange: "transform",
+          }}
         >
-          <div className="overflow-hidden rounded-3xl">
-            <motion.div
-              className="flex transition-transform duration-500 ease-in-out"
-              style={{
-                transform: `translateX(-${currentIndex * 100}%)`,
-              }}
-            >
-              {testimonials.map((testimonial) => (
-                <div
-                  key={testimonial.id}
-                  className="min-w-full px-4 md:px-8"
-                >
-                  <motion.div
-                    variants={itemVariants}
-                    className="glass-strong rounded-3xl p-8 md:p-12 border border-white/30 text-center"
-                  >
-                    <Quote className="h-12 w-12 text-indigo-400 mx-auto mb-6 opacity-50" />
-                    
-                    <div className="flex justify-center mb-6">
-                      {[...Array(testimonial.rating)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className="h-5 w-5 text-yellow-400 fill-yellow-400"
-                        />
-                      ))}
-                    </div>
+          {[...row1, ...row1, ...row1, ...row1].map((t, i) => (
+            <TestimonialCard key={`r1-${i}`} t={t} />
+          ))}
+        </div>
+      </div>
 
-                    <p className="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed max-w-3xl mx-auto">
-                      &quot;{testimonial.content}&quot;
-                    </p>
-
-                    <div className="mt-8">
-                      <h4 className="text-xl font-bold text-white mb-2">
-                        {testimonial.name}
-                      </h4>
-                      <p className="text-indigo-400 font-semibold mb-1">
-                        {testimonial.role}
-                      </p>
-                      <p className="text-white/70">{testimonial.company}</p>
-                    </div>
-                  </motion.div>
-                </div>
-              ))}
-            </motion.div>
-          </div>
-
-          {/* Navigation Arrows */}
-          <button
-            onClick={prevTestimonial}
-            className="absolute left-4 top-1/2 -translate-y-1/2 glass-strong p-3 rounded-full border border-white/30 hover:border-white/50 transition-all duration-200 text-white z-10"
-            aria-label="Previous testimonial"
-          >
-            <ChevronLeft className="h-6 w-6" />
-          </button>
-          <button
-            onClick={nextTestimonial}
-            className="absolute right-4 top-1/2 -translate-y-1/2 glass-strong p-3 rounded-full border border-white/30 hover:border-white/50 transition-all duration-200 text-white z-10"
-            aria-label="Next testimonial"
-          >
-            <ChevronRight className="h-6 w-6" />
-          </button>
-
-          {/* Dots Indicator */}
-          <div className="flex justify-center space-x-2 mt-8">
-            {testimonials.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => goToTestimonial(index)}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  index === currentIndex
-                    ? "w-8 glass-strong border border-white/30"
-                    : "w-2 glass border border-white/20"
-                }`}
-                aria-label={`Go to testimonial ${index + 1}`}
-              />
-            ))}
-          </div>
-        </motion.div>
+      {/* Row 2 — scrolls right */}
+      <div className="overflow-hidden">
+        <div
+          className="flex gap-5 w-max"
+          style={{
+            animation: "marquee-reverse 35s linear infinite",
+            willChange: "transform",
+          }}
+        >
+          {[...row2, ...row2, ...row2, ...row2].map((t, i) => (
+            <TestimonialCard key={`r2-${i}`} t={t} />
+          ))}
+        </div>
       </div>
     </section>
   );
 };
 
 export default TestimonialsSection;
-
-
-

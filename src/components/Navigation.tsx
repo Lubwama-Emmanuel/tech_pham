@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, X, Code, Smartphone, Server } from "lucide-react";
+import Image from "next/image";
+import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Navigation = () => {
@@ -30,45 +31,63 @@ const Navigation = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "glass-strong border-b border-white/20" : "bg-transparent"
+        scrolled
+          ? "border-b border-white/10"
+          : "bg-transparent"
       }`}
-      style={{ paddingTop: "env(safe-area-inset-top)" }}
+      style={{
+        paddingTop: "env(safe-area-inset-top)",
+        ...(scrolled && {
+          backgroundColor: "rgba(15, 15, 35, 0.85)",
+          backdropFilter: "blur(40px)",
+          WebkitBackdropFilter: "blur(40px)",
+        }),
+      }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            className="flex items-center space-x-2"
+        <div className="flex items-center justify-between h-16 relative">
+          {/* Logo — left */}
+          <motion.a
+            href="#home"
+            whileHover={{ scale: 1.02 }}
+            className="flex items-center flex-shrink-0"
           >
-            <div className="flex items-center space-x-1">
-              <Code className="h-8 w-8 text-indigo-400" />
-              <Smartphone className="h-6 w-6 text-orange-400" />
-              <Server className="h-6 w-6 text-emerald-400" />
+            <div className="relative h-12 w-40 overflow-hidden">
+              <Image
+                src="/logo_word.png"
+                alt="Lubech"
+                fill
+                className="object-contain scale-[3] origin-center"
+                priority
+              />
             </div>
-            <span className="text-xl font-bold gradient-text">Lubech</span>
-          </motion.div>
+          </motion.a>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          {/* Desktop Navigation — absolutely centered */}
+          <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center space-x-8">
             {navItems.map((item) => (
               <motion.a
                 key={item.name}
                 href={item.href}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="text-white/80 hover:text-white transition-colors duration-200 font-medium"
+                className="text-white/80 hover:text-white transition-colors duration-200 font-medium whitespace-nowrap"
               >
                 {item.name}
               </motion.a>
             ))}
-            <motion.button
+          </div>
+
+          {/* Get Started — right */}
+          <div className="hidden md:flex flex-shrink-0">
+            <motion.a
+              href="#contact"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="glass text-white px-6 py-2 rounded-full hover:glass-strong transition-all duration-200 border border-white/20"
             >
               Get Started
-            </motion.button>
+            </motion.a>
           </div>
 
           {/* Mobile menu button */}
@@ -109,13 +128,15 @@ const Navigation = () => {
                   {item.name}
                 </motion.a>
               ))}
-              <motion.button
+              <motion.a
+                href="#contact"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="w-full glass text-white px-6 py-2 rounded-full hover:glass-strong transition-all duration-200 border border-white/20"
+                onClick={() => setIsOpen(false)}
+                className="block text-center w-full glass text-white px-6 py-2 rounded-full hover:glass-strong transition-all duration-200 border border-white/20"
               >
                 Get Started
-              </motion.button>
+              </motion.a>
             </div>
           </motion.div>
         )}
