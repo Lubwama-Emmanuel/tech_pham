@@ -158,8 +158,8 @@ const AboutSection = () => {
               <p>
                 Founded in 2021, Lubech started as a passionate team of
                 developers with a mission to create exceptional digital
-                experiences that transform businesses and communities across
-                Uganda and beyond.
+                experiences that transform businesses and communities across the
+                UK and beyond.
               </p>
               <p>
                 Over the years, we&apos;ve successfully delivered over 30

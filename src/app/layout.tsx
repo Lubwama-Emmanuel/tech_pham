@@ -17,8 +17,6 @@ const BASE_URL = "https://lubech.tech";
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
   viewportFit: "cover",
   themeColor: "#0f0f23",
 };
@@ -28,15 +26,16 @@ export const metadata: Metadata = {
 
   // ── Core ──────────────────────────────────────────────────────────────────
   title: {
-    default: "Lubech | Web & Mobile App Development Agency — Uganda",
+    default: "Lubech | Web & Mobile App Development Agency — UK",
     template: "%s | Lubech",
   },
   description:
-    "Lubech is a Kampala-based software development agency building high-performance websites, cross-platform mobile apps, and robust backend systems. We bring ideas to life.",
+    "Lubech is a UK-based software development agency building high-performance websites, cross-platform mobile apps, and robust backend systems. We bring ideas to life.",
   keywords: [
-    "web development Uganda",
-    "mobile app development Uganda",
-    "software agency Kampala",
+    "web development UK",
+    "mobile app development UK",
+    "software agency United Kingdom",
+    "web development agency England",
     "Next.js development",
     "React Native apps",
     "Node.js backend",
@@ -45,8 +44,8 @@ export const metadata: Metadata = {
     "e-commerce development",
     "full-stack development",
     "Lubech",
-    "tech company Uganda",
-    "app development Africa",
+    "tech company UK",
+    "app development agency",
   ],
   authors: [
     { name: "Lubwama Emmanuel", url: BASE_URL },
@@ -64,13 +63,13 @@ export const metadata: Metadata = {
   // ── Open Graph ────────────────────────────────────────────────────────────
   openGraph: {
     type: "website",
-    locale: "en_UG",
-    alternateLocale: ["en_US", "en_GB"],
+    locale: "en_GB",
+    alternateLocale: ["en_US"],
     url: BASE_URL,
     siteName: "Lubech",
-    title: "Lubech | Web & Mobile App Development Agency — Uganda",
+    title: "Lubech | Web & Mobile App Development Agency — UK",
     description:
-      "We build stunning websites, cross-platform mobile apps, and robust backend systems. Based in Kampala, serving clients worldwide.",
+      "We build stunning websites, cross-platform mobile apps, and robust backend systems. Based in the UK, serving clients worldwide.",
     images: [
       {
         url: "/og-image.png",
@@ -89,7 +88,7 @@ export const metadata: Metadata = {
     creator: "@lubech",
     title: "Lubech | Web & Mobile App Development Agency",
     description:
-      "We build stunning websites, cross-platform mobile apps, and robust backend systems. Based in Kampala, serving clients worldwide.",
+      "We build stunning websites, cross-platform mobile apps, and robust backend systems. Based in the UK, serving clients worldwide.",
     images: ["/og-image.png"],
   },
 
@@ -151,7 +150,7 @@ const jsonLd = {
         height: 512,
       },
       description:
-        "Lubech is a Kampala-based software development agency building high-performance websites, cross-platform mobile apps, and robust backend systems.",
+        "Lubech is a UK-based software development agency building high-performance websites, cross-platform mobile apps, and robust backend systems.",
       foundingDate: "2022",
       founders: [
         { "@type": "Person", name: "Lubwama Emmanuel" },
@@ -159,8 +158,9 @@ const jsonLd = {
       ],
       address: {
         "@type": "PostalAddress",
-        addressLocality: "Kampala",
-        addressCountry: "UG",
+        addressLocality: "Northampton",
+        addressRegion: "England",
+        addressCountry: "GB",
       },
       contactPoint: [
         {
@@ -198,7 +198,7 @@ const jsonLd = {
       "@id": `${BASE_URL}/#website`,
       url: BASE_URL,
       name: "Lubech",
-      description: "Web & Mobile App Development Agency based in Kampala, Uganda",
+      description: "Web & Mobile App Development Agency based in the UK",
       publisher: { "@id": `${BASE_URL}/#organization` },
       potentialAction: {
         "@type": "SearchAction",
@@ -208,17 +208,17 @@ const jsonLd = {
         },
         "query-input": "required name=search_term_string",
       },
-      inLanguage: "en-UG",
+      inLanguage: "en-GB",
     },
     {
       "@type": "WebPage",
       "@id": `${BASE_URL}/#webpage`,
       url: BASE_URL,
-      name: "Lubech | Web & Mobile App Development Agency — Uganda",
+      name: "Lubech | Web & Mobile App Development Agency — UK",
       isPartOf: { "@id": `${BASE_URL}/#website` },
       about: { "@id": `${BASE_URL}/#organization` },
       description:
-        "We build stunning websites, cross-platform mobile apps, and robust backend systems. Based in Kampala, serving clients worldwide.",
+        "We build stunning websites, cross-platform mobile apps, and robust backend systems. Based in the UK, serving clients worldwide.",
       breadcrumb: {
         "@type": "BreadcrumbList",
         itemListElement: [
@@ -230,7 +230,7 @@ const jsonLd = {
           },
         ],
       },
-      inLanguage: "en-UG",
+      inLanguage: "en-GB",
     },
     {
       "@type": "ProfessionalService",
@@ -242,8 +242,9 @@ const jsonLd = {
       email: "info@lubech.tech",
       address: {
         "@type": "PostalAddress",
-        addressLocality: "Kampala",
-        addressCountry: "UG",
+        addressLocality: "Northampton",
+        addressRegion: "England",
+        addressCountry: "GB",
       },
       priceRange: "$$$",
       openingHoursSpecification: [
@@ -281,7 +282,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en-UG">
+    <html lang="en-GB">
       <head>
         <link rel="icon" href="/logo_icon.png" type="image/png" />
         <link rel="apple-touch-icon" href="/logo_icon.png" />

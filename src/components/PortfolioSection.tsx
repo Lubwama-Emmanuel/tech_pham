@@ -130,10 +130,11 @@ const ProjectCard = ({
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={`View live project: ${project.title}`}
                 className="glass-strong p-3 rounded-full border border-white/30 hover:border-white/60 transition-all"
                 onClick={(e) => e.stopPropagation()}
               >
-                <FaExternalLinkAlt className="h-5 w-5 text-white" />
+                <FaExternalLinkAlt className="h-5 w-5 text-white" aria-hidden="true" />
               </a>
             )}
           </div>

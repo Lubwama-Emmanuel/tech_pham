@@ -207,7 +207,7 @@ const Footer = () => {
                 whileTap={{ scale: 0.95 }}
                 className="p-2 glass rounded-lg border border-white/10 hover:border-white/25 transition-all duration-200"
               >
-                <s.icon className="h-4 w-4" style={{ color: s.color }} />
+                <s.icon className="h-4 w-4" style={{ color: s.color }} aria-hidden="true" />
               </motion.a>
             ))}
           </motion.div>

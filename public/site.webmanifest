@@ -1,14 +1,14 @@
 {
   "name": "Lubech — Web & Mobile Development",
   "short_name": "Lubech",
-  "description": "We build stunning websites, cross-platform mobile apps, and robust backend systems. Based in Kampala, Uganda.",
+  "description": "We build stunning websites, cross-platform mobile apps, and robust backend systems. Based in the UK, serving clients worldwide.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f0f23",
   "theme_color": "#4676C2",
   "orientation": "portrait-primary",
   "categories": ["business", "productivity", "technology"],
-  "lang": "en-UG",
+  "lang": "en-GB",
   "icons": [
     {
       "src": "/logo_icon.png",

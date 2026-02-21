@@ -77,9 +77,10 @@ const FloatingMenu = () => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0 }}
             onClick={scrollToTop}
+            aria-label="Scroll to top"
             className="absolute bottom-16 right-0 glass text-white p-3 rounded-full border border-white/20 hover:glass-strong hover:border-white/40 transition-all duration-200 mb-3"
           >
-            <ChevronUp className="h-6 w-6" />
+            <ChevronUp className="h-6 w-6" aria-hidden="true" />
           </motion.button>
         )}
       </AnimatePresence>
@@ -89,13 +90,15 @@ const FloatingMenu = () => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(!isOpen)}
+        aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+        aria-expanded={isOpen}
         className="glass-strong text-white p-4 rounded-full border border-white/30 hover:border-white/50 transition-all duration-200 shadow-lg"
       >
         <motion.div
           animate={{ rotate: isOpen ? 45 : 0 }}
           transition={{ duration: 0.2 }}
         >
-          {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          {isOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
         </motion.div>
       </motion.button>
 
