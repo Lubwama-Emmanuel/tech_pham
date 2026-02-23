@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
 
   // ── Core ──────────────────────────────────────────────────────────────────
   title: {
-    default: "Lubech | Web & Mobile App Development Agency — UK",
+    default: "Lubech — Web & Mobile App Development Agency",
     template: "%s | Lubech",
   },
   description:
@@ -67,7 +68,7 @@ export const metadata: Metadata = {
     alternateLocale: ["en_US"],
     url: BASE_URL,
     siteName: "Lubech",
-    title: "Lubech | Web & Mobile App Development Agency — UK",
+    title: "Lubech — Web & Mobile App Development Agency",
     description:
       "We build stunning websites, cross-platform mobile apps, and robust backend systems. Based in the UK, serving clients worldwide.",
     images: [
@@ -95,12 +96,13 @@ export const metadata: Metadata = {
   // ── Icons / PWA ───────────────────────────────────────────────────────────
   icons: {
     icon: [
-      { url: "/logo_icon.png", type: "image/png" },
+      { url: "/web_favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "32x32", type: "image/png" },
     ],
-    shortcut: "/logo_icon.png",
-    apple: "/logo_icon.png",
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
     other: [
-      { rel: "mask-icon", url: "/logo_icon.png", color: "#4676C2" },
+      { rel: "mask-icon", url: "/web_favicon.svg", color: "#4676C2" },
     ],
   },
   manifest: "/site.webmanifest",
@@ -214,7 +216,7 @@ const jsonLd = {
       "@type": "WebPage",
       "@id": `${BASE_URL}/#webpage`,
       url: BASE_URL,
-      name: "Lubech | Web & Mobile App Development Agency — UK",
+      name: "Lubech — Web & Mobile App Development Agency",
       isPartOf: { "@id": `${BASE_URL}/#website` },
       about: { "@id": `${BASE_URL}/#organization` },
       description:
@@ -236,7 +238,7 @@ const jsonLd = {
       "@type": "ProfessionalService",
       "@id": `${BASE_URL}/#service`,
       name: "Lubech Software Development",
-      image: `${BASE_URL}/og-image.png`,
+      image: `${BASE_URL}/og.png`,
       url: BASE_URL,
       telephone: "+256752615503",
       email: "info@lubech.tech",
@@ -284,8 +286,9 @@ export default function RootLayout({
   return (
     <html lang="en-GB">
       <head>
-        <link rel="icon" href="/logo_icon.png" type="image/png" />
-        <link rel="apple-touch-icon" href="/logo_icon.png" />
+        <link rel="icon" href="/web_favicon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/favicon.ico" sizes="32x32" type="image/png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <script
@@ -297,6 +300,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning={true}
       >
+        <GoogleAnalytics />
         {children}
       </body>
     </html>
