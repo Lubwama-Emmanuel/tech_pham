@@ -155,8 +155,8 @@ const jsonLd = {
         "Lubech is a UK-based software development agency building high-performance websites, cross-platform mobile apps, and robust backend systems.",
       foundingDate: "2022",
       founders: [
-        { "@type": "Person", name: "Lubwama Emmanuel" },
-        { "@type": "Person", name: "Lubega Faizal" },
+        { "@type": "Person", name: "Lubwama Emmanuel", jobTitle: "Co-Founder & CTO" },
+        { "@type": "Person", name: "Lubega Faizal", jobTitle: "CEO" },
       ],
       address: {
         "@type": "PostalAddress",

@@ -22,9 +22,9 @@ const AboutSection = () => {
     {
       id: "lubega",
       name: "Lubega Faizal",
-      role: "Co-Founder",
+      role: "CEO",
       image: "/staff/lubega.jpeg",
-      bio: "Co-founder dedicated to building exceptional digital experiences. Focused on driving innovation and delivering solutions that make a meaningful impact on businesses and communities.",
+      bio: "Chief Executive Officer dedicated to building exceptional digital experiences. Focused on driving innovation and delivering solutions that make a meaningful impact on businesses and communities.",
       social: {
         linkedin: "https://linkedin.com/in/lubega-faizal",
       },
