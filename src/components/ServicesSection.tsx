@@ -23,10 +23,10 @@ import {
   SiPrisma,
   SiStripe,
   SiVercel,
-  SiAwslambda,
   SiDart,
   SiJavascript,
 } from "react-icons/si";
+import { FaAws } from "react-icons/fa";
 import {
   Code,
   Smartphone,
@@ -99,7 +99,7 @@ const ServicesSection = () => {
     { name: "Supabase", icon: SiSupabase, color: "#3ECF8E" },
     { name: "GraphQL", icon: SiGraphql, color: "#E10098" },
     { name: "Docker", icon: SiDocker, color: "#2496ED" },
-    { name: "AWS", icon: SiAwslambda, color: "#FF9900" },
+    { name: "AWS", icon: FaAws, color: "#FF9900" },
   ];
 
   const techRow2 = [
